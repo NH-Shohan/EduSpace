@@ -10,7 +10,19 @@
 
 <body>
     <div class="header_section">
-        <h1>Ami Header</h1>
+        <div class="navbar_logo">
+            <img src="assets/logo.png" alt="Logo">
+        </div>
+
+        <div class="navbar_page_links">
+            <a href="view/pages/home/home.php">Home</a>
+            <a href="view/pages/about/about.php">About</a>
+        </div>
+
+        <div class="navbar_auth_link">
+            <a href="view/pages/login/login.php">Login</a>
+            <a href="view/pages/registration/registration.php">Registration</a>
+        </div>
     </div>
 </body>
 
