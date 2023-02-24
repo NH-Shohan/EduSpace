@@ -1,3 +1,13 @@
-.header_section h1 {
-  color: red;
+.header_section {
+  padding-inline: 10%;
+  padding-block: 10px;
+  box-shadow: 0 0 3px var(--light_text);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header_section a {
+  text-decoration: none;
+  margin-inline: 7px;
 }

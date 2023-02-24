@@ -11,7 +11,9 @@
 <body>
     <div class="header_section">
         <div class="navbar_logo">
-            <img src="assets/logo.png" alt="Logo">
+            <a href="#">
+                <img src="assets/logo.png" alt="Logo">
+            </a>
         </div>
 
         <div class="navbar_page_links">

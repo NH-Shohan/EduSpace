@@ -4,3 +4,17 @@
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
 }
+
+:root {
+  --primary: #e0fcff;
+  --secondary: #90f2ff;
+  --tertiary: #6eb6ff;
+  --text: #6f7dff;
+  --dark_text: #222222;
+  --secondary_text: #444444;
+  --light_text: #cccccc;
+}
+::selection {
+  color: var(--primary);
+  background: var(--text);
+}

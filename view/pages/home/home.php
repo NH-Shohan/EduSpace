@@ -9,6 +9,7 @@
 </head>
 
 <body>
+    <?php include "header.php" ?>
     <h1>Ami Home</h1>
 </body>
 
