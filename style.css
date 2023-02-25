@@ -13,6 +13,7 @@
   --dark_text: #222222;
   --secondary_text: #444444;
   --light_text: #cccccc;
+  --white: #ffffff;
 }
 ::selection {
   color: var(--primary);
