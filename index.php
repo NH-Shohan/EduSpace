@@ -2,24 +2,19 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EduSpace</title>
-
-  <!-- Font Link -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
-
-  <!-- CSS Link -->
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://kit.fontawesome.com/4bd420869f.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="view/styles.css">
 </head>
 
 <body>
-  <?php include "./view/components/header/header.php" ?>
-  <h1>Home</h1>
-  <?php include "./view/components/footer/footer.php" ?>
+    <?php include "View/Navbar.php" ?>
+    <?php include "View/Home/Heading.php" ?>
+    <?php include "View/Home/OurServices.php" ?>
+    <?php include "View/Home/TopCategories.php" ?>
 </body>
 
 </html>
