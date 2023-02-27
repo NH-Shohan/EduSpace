@@ -38,27 +38,22 @@
                 <ul>
                     <a class="nav_link <?= $page == 'index.php' ? 'active' : 'nav_link'; ?>" href="/Project">Home</a>
 
-                    <a class="nav_link <?= $page == 'about.php' ? 'active' : 'nav_link'; ?>"
-                        href="View/Pages/about.php">About</a>
+                    <a class="nav_link <?= $page == 'about.php' ? 'active' : 'nav_link'; ?>" href="View/Pages/about.php">About</a>
 
-                    <a class="nav_link <?= $page == 'courses.php' ? 'active' : 'nav_link'; ?>"
-                        href="View/Pages/courses.php">courses</a>
+                    <a class="nav_link <?= $page == 'courses.php' ? 'active' : 'nav_link'; ?>" href="View/Pages/courses.php">courses</a>
 
-                    <a class="nav_link <?= $page == 'instructor.php' ? 'active' : 'nav_link'; ?>"
-                        href="View/Pages/instructor.php">instructor</a>
+                    <a class="nav_link <?= $page == 'instructor.php' ? 'active' : 'nav_link'; ?>" href="View/Pages/instructor.php">instructor</a>
 
-                    <a class="nav_link <?= $page == 'audioBook.php' ? 'active' : 'nav_link'; ?>"
-                        href="View/Pages/audioBook.php">audioBook</a>
+                    <a class="nav_link <?= $page == 'audioBook.php' ? 'active' : 'nav_link'; ?>" href="View/Pages/audioBook.php">audioBook</a>
 
-                    <a class="nav_link <?= $page == 'podcast.php' ? 'active' : 'nav_link'; ?>"
-                        href="View/Pages/podcast.php">podcast</a>
+                    <a class="nav_link <?= $page == 'podcast.php' ? 'active' : 'nav_link'; ?>" href="View/Pages/podcast.php">podcast</a>
                 </ul>
             </div>
             <div class="navbar_auth_link">
                 <!-- Icon Gula kaj kortese na... Bujhtesi na ki hoise! -->
-                <ion-icon src="../../../assets/search-outline.svg"></ion-icon>
+                <!-- <ion-icon src="../../../assets/search-outline.svg"></ion-icon>
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <ion-icon name="cart-outline"></ion-icon>
+                <ion-icon name="cart-outline"></ion-icon> -->
 
                 <a class="login_btn" href="View/Pages/login.php">Login</a>
                 <a class="registration_btn" href="View/Pages/registration.php">Registration</a>

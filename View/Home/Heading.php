@@ -10,14 +10,12 @@
 
 <body>
     <div class="heading-container">
+        <div class="heading_circle"></div>
         <div class="heading container">
             <div class="left">
-
                 <div>
                     <h3>Learn New Skills Online <br>
-                        With Top <span class="educators">Educators<img
-                                style="position: absolute; right: 0; bottom: -10px; width: 100%;"
-                                src="View/Assets/educatorsUn.svg" alt="" srcset=""></span>
+                        With Top <span class="educators">Educators<img style="position: absolute; right: 0; bottom: -10px; width: 100%;" src="View/Assets/educatorsUn.svg" alt="" srcset=""></span>
                     </h3>
                 </div>
                 <div class="heading-left-body">

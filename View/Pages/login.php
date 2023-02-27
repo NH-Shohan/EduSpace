@@ -137,6 +137,9 @@
         </div>
     </div>
     <?php include "./../../View/Footer.php" ?>
+    <?php include "./../../View/Shared/Navbar.php" ?>
+    <h1>Ami Login</h1>
+    <?php include "./../../View/Shared/Footer.php" ?>
 </body>
 
 </html>
