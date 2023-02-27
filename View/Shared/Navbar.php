@@ -32,21 +32,26 @@
     <div class="navbar-container">
         <div class="navbar container">
             <div class="logo">
-                <img src="View/Assets/logo.svg" alt="">
+                <img src="./../../../Project/View/Assets/logo.svg" alt="">
             </div>
             <div class="quick-links">
                 <ul>
                     <a class="nav_link <?= $page == 'index.php' ? 'active' : 'nav_link'; ?>" href="/Project">Home</a>
 
-                    <a class="nav_link <?= $page == 'about.php' ? 'active' : 'nav_link'; ?>" href="View/Pages/about.php">About</a>
+                    <a class="nav_link <?= $page == 'about.php' ? 'active' : 'nav_link'; ?>"
+                        href="./../../../Project/View/Pages/about.php">About</a>
 
-                    <a class="nav_link <?= $page == 'courses.php' ? 'active' : 'nav_link'; ?>" href="View/Pages/courses.php">courses</a>
+                    <a class="nav_link <?= $page == 'courses.php' ? 'active' : 'nav_link'; ?>"
+                        href="./../../../Project/View/Pages/courses.php">courses</a>
 
-                    <a class="nav_link <?= $page == 'instructor.php' ? 'active' : 'nav_link'; ?>" href="View/Pages/instructor.php">instructor</a>
+                    <a class="nav_link <?= $page == 'instructor.php' ? 'active' : 'nav_link'; ?>"
+                        href="./../../../Project/View/Pages/instructor.php">instructor</a>
 
-                    <a class="nav_link <?= $page == 'audioBook.php' ? 'active' : 'nav_link'; ?>" href="View/Pages/audioBook.php">audioBook</a>
+                    <a class="nav_link <?= $page == 'audioBook.php' ? 'active' : 'nav_link'; ?>"
+                        href="./../../../Project/View/Pages/audioBook.php">audioBook</a>
 
-                    <a class="nav_link <?= $page == 'podcast.php' ? 'active' : 'nav_link'; ?>" href="View/Pages/podcast.php">podcast</a>
+                    <a class="nav_link <?= $page == 'podcast.php' ? 'active' : 'nav_link'; ?>"
+                        href="./../../../Project/View/Pages/podcast.php">podcast</a>
                 </ul>
             </div>
             <div class="navbar_auth_link">

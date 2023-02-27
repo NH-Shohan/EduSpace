@@ -22,6 +22,7 @@
             $nameErr = "Name is required";
         } else {
             $name = test_input($_POST["name"]);
+            $_SESSION["name"] = $_POST["name"];
         }
 
         // Validate the Email field
@@ -82,7 +83,7 @@
                     <div>
                         <fieldset>
                             <legend>
-                                <h3>Sign In</h3>
+                                <h3>Get Connected</h3>
                             </legend>
                         </fieldset>
                     </div>
@@ -98,6 +99,25 @@
                         <input type="text" name="email" id="email" value="<?php echo $email; ?>">
                         <span class="error">
                             <?php echo $emailErr; ?>
+                        </span>
+                    </p> <br />
+                    <p>
+                        <input type="submit" name="submit" value="Submit">
+                        <span class="success">
+                            <?php if (empty($nameErr) && empty($emailErr)) {
+                                ?>
+                                <p class="success">
+                                    Session variables are set
+                                </p>
+                                <?php
+                            } else {
+                                ?>
+                                <p class="error">
+                                    Session variables are not set
+                                </p>
+                                <?php
+                            }
+                            ?>
                         </span>
                     </p>
                 </form>
