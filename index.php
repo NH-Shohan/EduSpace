@@ -11,12 +11,11 @@
 </head>
 
 <body>
-    <?php include "View/Navbar.php" ?>
+    <?php include "View/Shared/Navbar.php" ?>
     <?php include "View/Home/Heading.php" ?>
     <?php include "View/Home/OurServices.php" ?>
     <?php include "View/Home/TopCategories.php" ?>
-    <?php include "View/Footer.php" ?>
-
+    <?php include "View/Shared/Footer.php" ?>
 </body>
 
 </html>

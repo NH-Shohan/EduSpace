@@ -16,7 +16,7 @@
   font-family: "Poppins", sans-serif;
   box-sizing: border-box;
 }
-body {
+/* body {
   background-image: linear-gradient(
     270deg,
     var(--primary),
@@ -27,7 +27,7 @@ body {
     var(--primary),
     var(--primary)
   );
-}
+} */
 
 .navbar-container {
   background-color: white;
@@ -160,6 +160,20 @@ body {
   text-decoration: none;
 }
 
+/* All Circle Style */
+.heading_circle {
+  width: 20%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background-color: var(--text);
+  opacity: 0.25;
+  position: absolute;
+  right: 0%;
+  top: 0;
+  filter: blur(100px);
+  z-index: -1;
+}
+
 /* Heading Home Page */
 .heading-container,
 .service-container,
@@ -168,6 +182,7 @@ body {
   height: 100vh;
   display: grid;
   align-items: center;
+  position: relative;
 }
 .service-container,
 .categories-container {
