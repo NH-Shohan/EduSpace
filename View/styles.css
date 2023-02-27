@@ -236,8 +236,9 @@ body {
   border: 2px solid var(--text);
   padding: 10px;
   border-radius: 10px;
-  width: 250px;
-  height: 300px;
+  width: 230px;
+  font-size: 0.9rem;
+  height: 260px;
   box-shadow: 6px 6px 1px var(--text);
 
   transition: all 600ms;
@@ -268,19 +269,55 @@ body {
 .categories-cards {
   display: grid;
   grid-template-columns: repeat(6, 0fr);
-  gap: 30px;
+  gap: 15px;
   justify-content: center;
+  /* justify-content: space-between; */
+
   /* align-items: center; */
 }
 
 .categories-cards .service-card:nth-child(6) {
   margin-top: 30px;
 }
+.categories-cards .service-card {
+  width: 180px;
+  height: 210px;
+  font-size: 0.8rem;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 30px;
+  color: var(--text);
+  font-size: clamp(1.2rem, 6vw, 2rem);
+}
 
 /* Responsive container */
+/* @media screen and (min-width: 1900px) {
+  .container {
+    max-width: 1480px;
+  }
+} */
 @media screen and (max-width: 1300px) {
   .container {
     max-width: 1280px;
+  }
+}
+@media screen and (max-width: 1600px) {
+  .categories-cards {
+    display: grid;
+    /* grid-template-columns: repeat(4, 1fr); */
+    justify-items: center;
+    justify-content: center;
+
+    /* justify-items: space-between; */
+  }
+
+  .categories-cards .service-card:nth-child(5) {
+    grid-column: 2/3;
+  }
+  .categories-cards .service-card:nth-child(6) {
+    /* grid-column: 3/4; */
   }
 }
 @media screen and (max-width: 1100px) {

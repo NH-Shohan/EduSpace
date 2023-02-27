@@ -15,6 +15,8 @@
     <?php include "View/Home/Heading.php" ?>
     <?php include "View/Home/OurServices.php" ?>
     <?php include "View/Home/TopCategories.php" ?>
+    <?php include "View/Footer.php" ?>
+
 </body>
 
 </html>

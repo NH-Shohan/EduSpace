@@ -12,7 +12,7 @@
 <body>
     <?php include "./../../View/Navbar.php" ?>
     <h1>Instructor</h1>
-    <?php include "./view/components/footer/footer.php" ?>
+    <?php include "./../../View/Footer.php" ?>
 </body>
 
 </html>
