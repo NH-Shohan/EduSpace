@@ -74,7 +74,7 @@
         return $data;
     }
     ?>
-    <?php include "./../../View/Navbar.php" ?>
+    <?php include "./../../View/Shared/Navbar.php" ?>
     <div class="login-container">
         <div class="container">
             <div class="login-inside">
@@ -100,45 +100,10 @@
                             <?php echo $emailErr; ?>
                         </span>
                     </p>
-                    <p>
-                        <label for="phone">Phone:</label>
-                        <input type="text" name="phone" id="phone" value="<?php echo $phone; ?>">
-                        <span class="error">
-                            <?php echo $phoneErr; ?>
-                        </span>
-                    </p>
-                    <p>
-                        <label for="website">Website:</label>
-                        <input type="text" name="website" id="website" value="<?php echo $website; ?>">
-                        <span class="error">
-                            <?php echo $websiteErr; ?>
-                        </span>
-                    </p>
-                    <p>
-                        <label for="gender">Gender:</label>
-                        <input type="radio" name="gender" id="gender_male" value="male" <?php if (isset($gender) && $gender == "male")
-                            echo "checked"; ?>>Male
-                        <input type="radio" name="gender" id="gender_female" value="female" <?php if (isset($gender) && $gender == "female")
-                            echo "checked"; ?>>Female
-                        <span class="error">
-                            <?php echo $genderErr; ?>
-                        </span>
-                    </p>
-                    <p>
-                        <input type="submit" name="submit" value="Submit">
-                        <span class="success">
-                            <?php if (empty($nameErr) && empty($emailErr) && empty($phoneErr) && empty($websiteErr) && empty($genderErr)) {
-                                echo "success";
-                            } ?>
-                        </span>
-                    </p>
                 </form>
             </div>
         </div>
     </div>
-    <?php include "./../../View/Footer.php" ?>
-    <?php include "./../../View/Shared/Navbar.php" ?>
-    <h1>Ami Login</h1>
     <?php include "./../../View/Shared/Footer.php" ?>
 </body>
 

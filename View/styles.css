@@ -36,6 +36,8 @@
   box-shadow: 0px 0px 5px #6f7dff;
   display: grid;
   align-items: center;
+  z-index: 999;
+  position: relative;
 }
 .navbar {
   display: flex;
@@ -100,6 +102,9 @@
 }
 
 /*  */
+.quick-links {
+  z-index: 111;
+}
 .quick-links a {
   text-decoration: none;
   margin-inline: 7px;
@@ -468,7 +473,7 @@ footer {
   color: white;
   padding: 5%;
 }
-footer hr{
+footer hr {
   margin-block: 20px;
 }
 .footer-col {
