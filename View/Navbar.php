@@ -7,6 +7,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Icon Link -->
     <link rel="stylesheet" href="https://kit.fontawesome.com/4bd420869f.css" crossorigin="anonymous">
+    <style>
+        .error {
+            color: red;
+            font-size: 14px;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+
+        .success {
+            color: green;
+            font-size: 14px;
+            font-weight: bold;
+            /* margin: 5px 0; */
+        }
+    </style>
     <title>Document</title>
 
     <!-- <link rel="stylesheet" href="styles.css"> -->
