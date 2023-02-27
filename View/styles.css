@@ -388,3 +388,26 @@ body {
     max-width: 95%;
   }
 }
+
+/* Footer Section */
+
+footer {
+  background-color: black;
+  color: white;
+  padding: 5%;
+}
+footer hr{
+  margin-block: 20px;
+}
+.footer-col {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  justify-items: center;
+}
+#for-address {
+  margin: 10%;
+}
+.end_footer {
+  margin-top: 20px;
+  text-align: center;
+}
