@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Icon Link -->
     <link rel="stylesheet" href="https://kit.fontawesome.com/4bd420869f.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <style>
         .error {
             color: red;
@@ -29,12 +30,19 @@
 
 <body>
     <?php $page = substr($_SERVER["SCRIPT_NAME"], strrpos($_SERVER["SCRIPT_NAME"], "/") + 1); ?>
+    <!-- Responsive -->
     <div class="navbar-container">
         <div class="navbar container">
             <div class="logo">
-                <img src="./../../../Project/View/Assets/logo.svg" alt="">
+                <a href="/Project"><img src="./../../../Project/View/Assets/logo.svg" alt="" /></a>
             </div>
-            <div class="quick-links">
+            <!-- Add an icon to toggle the menu -->
+            <div class="icon" onclick="toggleMenu()">
+                <i class="fa fa-bars"></i>
+                <!-- <i class="fa fa-times"></i> -->
+            </div>
+            <!-- Wrap the links in a div with an id -->
+            <div id="menu" class="quick-links">
                 <ul>
                     <a class="nav_link <?= $page == 'index.php' ? 'active' : 'nav_link'; ?>" href="/Project">Home</a>
 
@@ -54,14 +62,15 @@
                         href="./../../../Project/View/Pages/podcast.php">podcast</a>
                 </ul>
             </div>
-            <div class="navbar_auth_link">
+            <!-- Move the auth links inside the menu div -->
+            <div id="menu" class="navbar_auth_link">
                 <!-- Icon Gula kaj kortese na... Bujhtesi na ki hoise! -->
                 <!-- <ion-icon src="../../../assets/search-outline.svg"></ion-icon>
                 <i class="fa-solid fa-magnifying-glass"></i>
                 <ion-icon name="cart-outline"></ion-icon> -->
 
-                <a class="login_btn" href="View/Pages/login.php">Login</a>
-                <a class="registration_btn" href="View/Pages/registration.php">Registration</a>
+                <a class="login_btn" href="./../../../Project/View/Pages/login.php">Login</a>
+                <a class="registration_btn" href="./../../../Project/View/Pages/registration.php">Registration</a>
             </div>
         </div>
     </div>
