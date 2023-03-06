@@ -125,6 +125,8 @@
         </div>
     </div>
     <?php include "./../../View/Shared/Footer.php" ?>
+    <!-- for Navbar Responsive -->
+    <script src="./../../View/Shared/navbarScript.js"></script>
 </body>
 
 </html>

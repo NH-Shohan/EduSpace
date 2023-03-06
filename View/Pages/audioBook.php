@@ -13,6 +13,8 @@
     <?php include "./../../View/Shared/Navbar.php" ?>
     <h1>Audio Book</h1>
     <?php include "./../../View/Shared/Footer.php" ?>
+    <!-- for Navbar Responsive -->
+    <script src="./../../View/Shared/navbarScript.js"></script>
 </body>
 
 </html>
