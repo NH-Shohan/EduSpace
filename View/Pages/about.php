@@ -8,6 +8,14 @@
     <title>EduSpace</title>
     <link rel="stylesheet" href="./../../View/styles.css">
     <style>
+        .about_top{
+            background-image:url("https://www.chavarainstitute.com/assets/images/ielts-banner.jpg");
+            background-size: cover;
+            color: var(--text);
+            text-align: center;
+            margin-top: 50px;
+            padding: 150px;
+        }
         .course-card {
             width: 300px;
             height: auto;
@@ -46,9 +54,13 @@
 
 <body>
     <?php include "./../../View/Shared/Navbar.php" ?>
+    <section class="about_top img-fluid">
     <h1>About</h1>
-    <section>
-        
+    </section>
+    <section class="about_eduspace">
+        <div>
+            <h2></h2>
+        </div>
     </section>
     <?php include "./../../View/Shared/Footer.php" ?>
 
