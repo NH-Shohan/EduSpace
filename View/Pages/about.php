@@ -47,6 +47,9 @@
 <body>
     <?php include "./../../View/Shared/Navbar.php" ?>
     <h1>About</h1>
+    <section>
+        
+    </section>
     <?php include "./../../View/Shared/Footer.php" ?>
 
     <!-- for Navbar Responsive -->
