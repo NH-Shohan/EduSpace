@@ -1,0 +1,75 @@
+// View
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>User Registration</title>
+</head>
+
+<body>
+    <h1>User Registration</h1>
+    <form action="controller.php" method="post">
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username" required><br><br>
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password" required><br><br>
+        <input type="submit" value="Register">
+    </form>
+</body>
+
+</html>
+
+
+
+
+
+// Controller
+<?php
+require_once 'model.php';
+
+function register()
+{
+    $user = new User('localhost', 'root', '', 'login_system');
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+        if ($user->register($username, $password)) {
+            header('Location: index.php?action=success');
+            exit;
+        } else {
+            header('Location: index.php?action=error');
+            exit;
+        }
+    } else {
+        require 'view.php';
+    }
+}
+?>
+
+
+// Model
+
+<?php
+class User
+{
+    private $conn;
+
+    public function __construct($host, $user, $password, $database)
+    {
+        $this->conn = new mysqli($host, $user, $password, $database);
+        if ($this->conn->connect_error) {
+            die("Connection failed: " . $this->conn->connect_error);
+        }
+    }
+
+    public function register($username, $password)
+    {
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        $stmt = $this->conn->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
+        $stmt->bind_param("ss", $username, $hashedPassword);
+        return $stmt->execute();
+    }
+}
+?>

@@ -1,3 +1,6 @@
+<!-- <?php
+session_start();
+?> -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -69,8 +72,24 @@
                 <i class="fa-solid fa-magnifying-glass"></i>
                 <ion-icon name="cart-outline"></ion-icon> -->
 
-                <a class="login_btn" href="./../../../Project/View/Pages/login.php">Login</a>
-                <a class="registration_btn" href="./../../../Project/View/Pages/registration.php">Registration</a>
+                <?php
+                if (empty($_COOKIE['loggedUser'])) {
+                    ?>
+                    <a class="login_btn" href="./../../../Project/View/Pages/login.php">Login</a>
+                    <a class="registration_btn" href="./../../../Project/View/Pages/registration.php">Registration</a>
+
+                    <?php
+                } else {
+                    $_SESSION["authEvent"] = "logout";
+                    ?>
+                    <a class="registration_btn" href="./../../../Project/Controller/UserController.php">Logout</a>
+                    <span>
+                        <?php echo $_SESSION['name'] ?>
+                    </span>
+                    <?php
+                }
+
+                ?>
             </div>
         </div>
     </div>

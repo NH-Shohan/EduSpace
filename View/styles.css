@@ -16,6 +16,9 @@
   font-family: "Poppins", sans-serif;
   box-sizing: border-box;
 }
+body {
+  margin-top: 60px; /* for the fixed navbar */
+}
 /* body {
   background-image: linear-gradient(
     270deg,
@@ -37,7 +40,9 @@
   display: grid;
   align-items: center;
   z-index: 999;
-  position: relative;
+  position: fixed;
+  width: 100%;
+  top: 0;
 }
 .navbar {
   display: flex;
@@ -85,6 +90,13 @@
     justify-content: center;
     background-color: white;
     transition: opacity 0.8s ease-in-out;
+  }
+
+  #menu.navbar_auth_link {
+    display: none;
+    position: absolute;
+    top: 30%;
+    left: 0;
   }
 
   /* Make the links stack vertically */
@@ -244,7 +256,7 @@
 .heading-container,
 .service-container,
 .categories-container {
-  margin-top: -60px;
+  margin-top: 60px;
   height: 100vh;
   display: grid;
   align-items: center;
@@ -391,6 +403,7 @@
 }
 
 .login-container .login-inside {
+  /* margin-top: 60px; */
   height: 100vh;
   display: grid;
   justify-content: center;
@@ -398,12 +411,12 @@
   align-items: center;
 }
 .login-container form {
-  width: 400px;
-  height: 400px;
+  min-width: 400px;
+  min-height: 400px;
   /* border: 1px solid var(--); */
   box-shadow: 1px 1px 5px var(--tertiary);
   border-radius: 10px;
-  padding: 10px;
+  padding: 30px;
 }
 .login-container h3 {
   text-align: center;
@@ -428,6 +441,28 @@ input {
   padding: 3px;
   border-radius: 5px;
   background-color: var(--primary);
+}
+.submit-btn {
+  background-image: linear-gradient(
+    270deg,
+    var(--text),
+    var(--tertiary),
+    var(--text),
+    var(--tertiary),
+    var(--secondary),
+    var(--tertiary),
+    var(--text),
+    var(--tertiary),
+    var(--text)
+  );
+  padding: 3px;
+  border-radius: 10px;
+}
+.auth-submit-button {
+  /* border: 3px solid var(--text); */
+  font-weight: bold;
+  color: var(--secondaryText);
+  border-radius: 8px;
 }
 
 /* Responsive container */

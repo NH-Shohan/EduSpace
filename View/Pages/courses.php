@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -71,11 +74,13 @@
             margin: 0;
             padding: 0;
             display: flex;
+            flex-wrap: wrap;
             justify-content: center;
         }
 
         .category-bar li {
-            margin: 0 10px;
+            margin: 5px 10px;
+
         }
 
         .category-bar li a {
@@ -91,6 +96,51 @@
         .category-bar li a:hover {
             background-color: var(--darkText);
             color: #fff;
+        }
+
+        /* Add a menu icon for smaller screens */
+        .category-bar span {
+            display: none;
+            /* Hide by default */
+        }
+
+        @media screen and (max-width:768px) {
+            .category-bar span {
+                display: block;
+                /* Hide by default */
+            }
+
+            /* Use media query for screens smaller than or equal to
+768 pixels */
+            .category-bar ul {
+                /* Hide all categories except for first one */
+                display: none;
+
+            }
+
+            .category-bar ul:first-child {
+                /* Show only first category */
+                display: flex;
+                align-items: center;
+            }
+
+            .category-bar span {
+                color: var(--primary);
+                font-weight: bold;
+            }
+
+            .category-bar li {
+                padding: 10px 0;
+            }
+
+            .icon {
+                /* Show menu icon */
+                display: block;
+                float: right;
+                font-size: 24px;
+                cursor: pointer;
+                color: var(--primary)
+            }
         }
 
         /* Motivation */
@@ -112,7 +162,7 @@
         }
 
         .hero-text h1 {
-            font-size: 60px;
+            font-size: clamp(3rem, 6vw, 6rem);
             margin-bottom: 20px;
         }
 
@@ -150,6 +200,7 @@
             width: 80%;
             max-width: 1200px;
         }
+
 
         .slider-track {
             display: flex;
@@ -228,6 +279,25 @@
             z-index: 999;
         }
 
+        @media screen and (max-width:768px) {
+            .slider-container {
+                position: relative;
+                overflow-x: auto;
+                width: 100%;
+            }
+
+            .course-card {
+                flex: auto;
+            }
+
+            .slider-buttons {
+                display: none;
+            }
+
+
+
+        }
+
         /* Courses */
         .all-courses {
             padding: 50px 0;
@@ -300,7 +370,7 @@
     <?php include "./../../View/Shared/Navbar.php" ?>
 
     <!-- Main page -->
-    <div>
+    <div class="courses">
         <!-- Search bar -->
         <div class="search-container">
             <div class="container">
@@ -314,6 +384,9 @@
         <!-- Category -->
         <div class="category-bar">
             <div class="">
+
+                <!-- Add a menu icon -->
+                <span class="icon" onclick="toggleCategoryMenu()">&#9776;</span> <span>Categories</span>
                 <ul>
                     <li><a href="#">Development</a></li>
                     <li><a href="#">Business</a></li>
@@ -513,6 +586,16 @@
 
     </script>
     <script src="./../../View/Shared/navbarScript.js"></script>
+    <script>
+        function toggleCategoryMenu() {
+            var x = document.querySelector(".category-bar ul"); // Select all categories
+            if (x.style.display === "none") { // If hidden, show them
+                x.style.display = "block";
+            } else { // If shown, hide them
+                x.style.display = "none";
+            }
+        }
+    </script>
 </body>
 
 </html>

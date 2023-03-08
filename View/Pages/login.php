@@ -11,62 +11,30 @@
 
 <body>
     <?php
-    // Define variables and initialize with empty values
-    $name = $email = $phone = $website = $gender = "";
-    $nameErr = $emailErr = $phoneErr = $websiteErr = $genderErr = "";
+    session_start();
+    $name = $email = $username = $password = "";
 
-    // Check if the form has been submitted
+    $nameError = $emailError = $usernameError = $passwordError = "";
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // Validate the Name field
-        if (empty($_POST["name"])) {
-            $nameErr = "Name is required";
+        if (empty($_POST['email'])) {
+            $emailError = "Email is required.";
+        } elseif (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+            $emailError = "Invalid email format.";
         } else {
-            $name = test_input($_POST["name"]);
-            $_SESSION["name"] = $_POST["name"];
+            $email = test_input($_POST['email']);
+            $_SESSION['email'] = $email;
         }
-
-        // Validate the Email field
-        if (empty($_POST["email"])) {
-            $emailErr = "Email is required";
+        if (empty($_POST['password'])) {
+            $passwordError = "Password is required.";
         } else {
-            $email = test_input($_POST["email"]);
-            // Check if email address is well-formed
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $emailErr = "Invalid email format";
-            }
+            $password = test_input($_POST['password']);
+            $_SESSION['password'] = $password;
         }
-
-        // Validate the Phone field
-        if (empty($_POST["phone"])) {
-            $phoneErr = "Phone number is required";
-        } else {
-            $phone = test_input($_POST["phone"]);
-            // Check if phone number only contains numbers and dashes
-            if (!preg_match("/^[0-9-]+$/", $phone)) {
-                $phoneErr = "Invalid phone number format";
-            }
-        }
-
-        // Validate the Website field
-        if (empty($_POST["website"])) {
-            $websiteErr = "";
-        } else {
-            $website = test_input($_POST["website"]);
-            // Check if website URL address is well-formed
-            if (!filter_var($website, FILTER_VALIDATE_URL)) {
-                $websiteErr = "Invalid website URL format";
-            }
-        }
-
-        // Validate the Gender field
-        if (empty($_POST["gender"])) {
-            $genderErr = "Gender is required";
-        } else {
-            $gender = test_input($_POST["gender"]);
+        if (!empty($email) && !empty($password)) {
+            $_SESSION["authEvent"] = "login";
+            header("Location: ./../../Controller/UserController.php");
         }
     }
-
-    // Function to sanitize and validate input data
     function test_input($data)
     {
         $data = trim($data);
@@ -83,42 +51,59 @@
                     <div>
                         <fieldset>
                             <legend>
-                                <h3>Get Connected</h3>
+                                <h3>Login</h3>
                             </legend>
                         </fieldset>
                     </div>
                     <p>
-                        <label for="name">Name:</label> <br>
-                        <input type="text" name="name" id="name" value="<?php echo $name; ?>">
+                        <label for="email">Email:</label><br />
+                        <input type="text" id="email" name="email" value="<?php echo $email; ?>"><br />
                         <span class="error">
-                            <?php echo $nameErr; ?>
-                        </span>
-                    </p>
-                    <p>
-                        <label for="email">Email:</label>
-                        <input type="text" name="email" id="email" value="<?php echo $email; ?>">
-                        <span class="error">
-                            <?php echo $emailErr; ?>
-                        </span>
-                    </p> <br />
-                    <p>
-                        <input type="submit" name="submit" value="Submit">
-                        <span class="success">
-                            <?php if (empty($nameErr) && empty($emailErr)) {
-                                ?>
-                                <p class="success">
-                                    Session variables are set
-                                </p>
-                                <?php
+                            <?php
+                            if (isset($emailError)) {
+                                echo $emailError;
                             } else {
-                                ?>
-                                <p class="error">
-                                    Session variables are not set
-                                </p>
-                                <?php
+                                echo "";
                             }
                             ?>
                         </span>
+                    </p> <br />
+                    <p>
+                        <label for="password">Password:</label><br />
+                        <input type="password" id="password" name="password">
+                        <span class="error">
+                            <?php
+                            if (isset($passwordError)) {
+                                echo $passwordError;
+                            } else {
+                                echo "";
+                            }
+                            ?>
+                        </span>
+                    </p> <br />
+                    <p>
+                    <div class="submit-btn">
+                        <input class="auth-submit-button" type="submit" name="submit" value="Submit">
+                    </div>
+                    <br />
+
+                    <span class="error">
+                        <?php if (isset($_GET['error'])) {
+                            ?>
+                            <p class="error">
+                                <?php echo $_GET['error']; ?>
+                            </p>
+                            <?php
+                        } else {
+                            echo "";
+                            ?>
+
+                            <?php
+                        }
+                        ?>
+                    </span>
+                    <br />
+                    <p>Not a user? <a href="registration.php">Register here</a>.</p>
                     </p>
                 </form>
             </div>
