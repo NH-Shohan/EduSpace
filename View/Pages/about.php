@@ -15,31 +15,35 @@ require_once './../../Controller/db_connect.php';
     <!-- font awesome link -->
     <script src="https://kit.fontawesome.com/9a6693ad48.js" crossorigin="anonymous"></script>
     <style>
-        /*add background image in top*/ 
-        .about_top{
-            background-image:url("https://www.chavarainstitute.com/assets/images/ielts-banner.jpg");
+        /*add background image in top*/
+        .about_top {
+            background-image: url("https://www.chavarainstitute.com/assets/images/ielts-banner.jpg");
             background-size: cover;
             color: var(--text);
             text-align: center;
             margin-top: 50px;
             padding: 150px;
         }
+
         /*journey of Eduspace part  */
-        .about_eduspace{
+        .about_eduspace {
             display: grid;
             grid-template-columns: 60% 40%;
             gap: 30px;
         }
-        .about-tittle{
+
+        .about-tittle {
             margin-top: 15%;
             margin-left: 10%;
-        }  
+        }
+
         /* short underline */
-        .About-tittle-header{
+        .About-tittle-header {
             display: inline-block;
             position: relative;
         }
-        .About-tittle-header::after{
+
+        .About-tittle-header::after {
             content: '';
             height: 3px;
             width: 10%;
@@ -48,16 +52,19 @@ require_once './../../Controller/db_connect.php';
             left: 0;
             bottom: 0;
         }
-        #part-about-tittle{
+
+        #part-about-tittle {
             color: var(--text);
         }
-        .about-para{
+
+        .about-para {
             text-align: justify;
             margin-top: 2%;
             margin-left: 10%;
             margin-right: 5%;
         }
-        .about-btn{
+
+        .about-btn {
             font-weight: 700;
             color: white;
             padding: 1% 4%;
@@ -68,6 +75,7 @@ require_once './../../Controller/db_connect.php';
             margin-left: 10%;
             margin-right: 5%;
         }
+
         .course-card {
             width: 300px;
             height: auto;
@@ -78,7 +86,8 @@ require_once './../../Controller/db_connect.php';
 
         /* Make the image fit the card width */
         .course-card img {
-            width: 100%;
+            height: 100%;
+            width: 350px;
         }
 
         /* Center the text content */
@@ -101,24 +110,74 @@ require_once './../../Controller/db_connect.php';
             /* Transition the effects smoothly */
             transition: all .5s ease-in-out;
         }
+
+        /* Responsive CSS for EduSpace About Page */
+
+        /* Adjust the top section background image height on smaller screens */
+        @media only screen and (max-width: 768px) {
+            .about_top {
+                padding: 80px;
+            }
+        }
+
+        /* Adjust the grid layout of the Journey of EduSpace section on smaller screens */
+        @media only screen and (max-width: 768px) {
+            .about_eduspace {
+                grid-template-columns: 100%;
+            }
+        }
+
+        /* Adjust the margin and padding of the Journey of EduSpace section on smaller screens */
+        @media only screen and (max-width: 768px) {
+            .about-tittle {
+                margin-top: 10%;
+                margin-left: 5%;
+            }
+
+            .about-para {
+                margin-left: 5%;
+                margin-right: 5%;
+            }
+        }
+
+        /* Adjust the font size of the Explore more button on smaller screens */
+        @media only screen and (max-width: 768px) {
+            .about-btn {
+                font-size: 14px;
+            }
+        }
+
+        /* Adjust the size of the course card on smaller screens */
+        @media only screen and (max-width: 768px) {
+            .course-card {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 
 <body>
     <?php include "./../../View/Shared/Navbar.php" ?>
-    <section class="about_top img-fluid">
-    <h1>About</h1>
-    </section>
-    <section class="about_eduspace">
-        <div class="About_eduspace">
-            <h1 class="about-tittle About-tittle-header">Journey of<span id="part-about-tittle"> EduSpace</span></h1>
-            <P class="about-para">EduSpace is an online learning platform that offers a wide variety of courses taught by expert instructors. The courses cover a broad range of topics, from coding and web development to business and personal development. Users can enroll in courses individually or sign up for a subscription that provides access to all courses on the platform.</P>
-            <a src=""><button class="about-btn">Explore more  <i class="fa-solid fa-arrow-right"></i></button></a>
-        </div>
-        <div>
-            <img src="https://themesflat.co/html/educate/images/services/1.jpg" alt="">
-        </div>
-    </section>
+    <div class="about">
+        <section class="about_top img-fluid">
+            <h1>About</h1>
+        </section>
+        <section class="about_eduspace container">
+            <div class="About_eduspace">
+                <h1 class="about-tittle About-tittle-header">Journey of<span id="part-about-tittle"> EduSpace</span>
+                </h1>
+                <P class="about-para">EduSpace is an online learning platform that offers a wide variety of courses
+                    taught
+                    by expert instructors. The courses cover a broad range of topics, from coding and web development to
+                    business and personal development. Users can enroll in courses individually or sign up for a
+                    subscription that provides access to all courses on the platform.</P>
+                <a src=""><button class="about-btn">Explore more <i class="fa-solid fa-arrow-right"></i></button></a>
+            </div>
+            <div>
+                <img src="https://themesflat.co/html/educate/images/services/1.jpg" alt="">
+            </div>
+        </section>
+    </div>
     <?php include "./../../View/Shared/Footer.php" ?>
 
     <!-- for Navbar Responsive -->

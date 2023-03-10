@@ -248,6 +248,12 @@ if (mysqli_num_rows($result) > 0) {
             display: none;
         }
 
+        .lecture-name {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+
         @media only screen and (max-width: 1024px) {
 
             .main,
@@ -318,30 +324,43 @@ if (mysqli_num_rows($result) > 0) {
                     $module_index = 0;
                     $lectureDescription = "";
                     foreach ($modules as $module) {
-                        echo '<div class="milestone border-b">';
-                        echo '<div class="flex">';
-                        echo '<div class="checkbox"><input type="checkbox" onclick="markMileStone(this, ' . $module_index . ')" /></div>';
-                        echo '<div>';
-                        echo '<p>';
-                        echo $module['name'];
-                        echo '<span><i class="fas fa-chevron-down"></i></span>';
-                        echo '</p>';
-                        echo '</div>';
-                        echo '</div>';
-                        echo '<div class="hidden_panel">';
-                        foreach ($module['lectures'] as $lecture) {
-                            // $lectureDescription = $lecture['lectureDescription'];
-                            echo '<div class="module border-b">';
-                            echo '<p><a description="' . $lecture['lectureDescription'] . '" href="' . $lecture['url'] . '">' . $lecture['name'] . '</a></p>';
-                            echo '</div>';
-                        }
-                        echo '</div>';
-                        echo '</div>';
-
+                        ?>
+                        <div class="milestone border-b">
+                            <div class="flex">
+                                <div class="checkbox"><input type="checkbox"
+                                        onclick="markMileStone(this, <?php echo $module_index; ?>)" /></div>
+                                <div class="lecture-name">
+                                    <p>
+                                        <?php echo $module['name']; ?>
+                                    </p>
+                                    <p>
+                                        <span><i class="fas fa-chevron-down"></i></span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="hidden_panel">
+                                <?php foreach ($module['lectures'] as $lecture) { ?>
+                                    <div class="module border-b">
+                                        <p>
+                                            <a description="<?php echo $lecture['lectureDescription']; ?>"
+                                                href="<?php echo $lecture['url']; ?>">
+                                                <?php echo $lecture['name']; ?>
+                                            </a>
+                                        </p>
+                                    </div>
+                                <?php } ?>
+                            </div>
+                        </div>
+                        <?php
                         $module_index++;
                     }
                     ?>
+
                 </div>
+                <br>
+                <br>
+                <br>
+                <b>Completed Modules..............</b>
                 <div class="doneList">
                     <!-- done list will load here -->
                 </div>
@@ -357,7 +376,7 @@ if (mysqli_num_rows($result) > 0) {
         const details = document.querySelector(".details");
 
         milestoneDivs.forEach((milestoneDiv) => {
-            const milestoneTitleDiv = milestoneDiv.querySelector("div p");
+            const milestoneTitleDiv = milestoneDiv.querySelector(".lecture-name");
             const hiddenPanelDiv = milestoneDiv.querySelector(".hidden_panel");
 
             milestoneTitleDiv.addEventListener("click", () => {
