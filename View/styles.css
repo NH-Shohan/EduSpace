@@ -317,6 +317,10 @@ body {
   color: var(--tertiary);
 }
 
+button:disabled {
+  background-color: var(--secondaryText2);
+}
+
 /* Cards */
 .service-cards {
   display: grid;

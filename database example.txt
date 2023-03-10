@@ -1,0 +1,98 @@
+*
+// to create course table
+CREATE TABLE login_system.courses (
+    course_id INT AUTO_INCREMENT PRIMARY KEY,
+    course_name VARCHAR(255) NOT NULL,
+    course_image VARCHAR(255),
+    course_category VARCHAR(255) NOT NULL,
+    instructor_name VARCHAR(255) NOT NULL,
+    instructor_email VARCHAR(255) NOT NULL,
+    rating FLOAT,
+    description TEXT,
+    course_modules TEXT,
+    course_fee DECIMAL(10,2) NOT NULL
+);
+
+*
+INSERT INTO login_system.courses (course_name, course_image, course_category, instructor_name, instructor_email, rating, description, course_modules, course_fee)
+VALUES ('Introduction to Python Programming', 'python.jpg', 'Programming', 'John Doe', 'john@example.com', 4.5, 'Learn the fundamentals of Python programming language.', 'Module 1: Introduction to Python\nModule 2: Data Types and Variables\nModule 3: Control Structures\nModule 4: Functions\nModule 5: Object-Oriented Programming', 99.99);
+
+
+
+*update course.............................................................................
+// get the new values for the course to be updated
+$course_name = "Introduction to Java Programming";
+$course_image = "java.jpg";
+$course_category = "Programming";
+$instructor_name = "Jane Doe";
+$instructor_email = "jane@example.com";
+$rating = 4.8;
+$description = "Learn the fundamentals of Java programming language.";
+$course_modules = "Module 1: Introduction to Java\nModule 2: Data Types and Variables\nModule 3: Control Structures\nModule 4: Functions\nModule 5: Object-Oriented Programming";
+$course_fee = 199.99;
+
+// update the course record
+$sql = "UPDATE courses SET course_name = '$course_name', course_image = '$course_image', course_category = '$course_category', instructor_name = '$instructor_name', instructor_email = '$instructor_email', rating = $rating, description = '$description', course_modules = '$course_modules', course_fee = $course_fee WHERE course_id = 1";
+
+if ($conn->query($sql) === TRUE) {
+  echo "Record updated successfully";
+} else {
+  echo "Error updating record: " . $conn->error;
+}
+..........................................................................................
+
+
+*
+CREATE TABLE login_system.recommended_courses (
+  recommended_course_id INT AUTO_INCREMENT PRIMARY KEY,
+  course_id INT NOT NULL,
+  FOREIGN KEY (course_id) REFERENCES login_system.courses(course_id),
+  UNIQUE (course_id)
+);
+
+* INSERT INTO login_system.recommended_courses (course_id) VALUES (1);
+
+
+
+
+
+
+.........................content.....................................
+CREATE TABLE login_system.course_content (
+content_id INT AUTO_INCREMENT PRIMARY KEY,
+course_id INT NOT NULL,
+totalModule INT NOT NULL,
+moduleNumber INT NOT NULL,
+moduleName VARCHAR(255) NOT NULL,
+totalLecture INT NOT NULL,
+lectureNumber INT NOT NULL,
+lectureName VARCHAR(255) NOT NULL,
+lectureDescription TEXT NOT NULL,
+videoName VARCHAR(255) NOT NULL,
+lectureVideoLinks TEXT NOT NULL,
+CONSTRAINT fk_course_content_course_id
+FOREIGN KEY (course_id)
+REFERENCES login_system.courses(course_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+);
+
+
+INSERT INTO login_system.course_content (course_id, totalModule, moduleNumber, moduleName, totalLecture, lectureNumber, lectureName, lectureDescription, videoName, lectureVideoLinks)
+VALUES (1, 3, 1, 'Introduction to Programming', 5, 1, 'What is Programming?', 'This lecture introduces the basics of programming.', 'Introduction Video', 'https://www.youtube.com/watch?v=abcxyz'),
+(1, 3, 1, 'Introduction to Programming', 5, 2, 'Variables and Data Types', 'This lecture covers variables and data types in programming.', 'Variables and Data Types Video', 'https://www.youtube.com/watch?v=def123'),
+(1, 3, 1, 'Introduction to Programming', 5, 3, 'Operators and Expressions', 'This lecture covers operators and expressions in programming.', 'Operators and Expressions Video', 'https://www.youtube.com/watch?v=ghi789'),
+(1, 3, 1, 'Introduction to Programming', 5, 4, 'Control Structures', 'This lecture covers control structures in programming.', 'Control Structures Video', 'https://www.youtube.com/watch?v=jkl456'),
+(1, 3, 1, 'Introduction to Programming', 5, 5, 'Functions and Modules', 'This lecture covers functions and modules in programming.', 'Functions and Modules Video', 'https://www.youtube.com/watch?v=mno789');
+
+
+INSERT INTO login_system.course_content (course_id, totalModule, moduleNumber, moduleName, totalLecture, lectureNumber, lectureName, lectureDescription, videoName, lectureVideoLinks)
+VALUES (1, 3, 2, 'Intermediate to Programming', 5, 1, 'What is Programming?', 'This lecture introduces the basics of programming.', 'Introduction Video', 'https://www.youtube.com/watch?v=abcxyz'),
+(1, 3, 2, 'Intermediate to Programming', 5, 2, 'Variables and Data Types', 'This lecture covers variables and data types in programming.', 'Variables and Data Types Video', 'https://www.youtube.com/watch?v=def123'),
+(1, 3, 2, 'Intermediate to Programming', 5, 3, 'Operators and Expressions', 'This lecture covers operators and expressions in programming.', 'Operators and Expressions Video', 'https://www.youtube.com/watch?v=ghi789'),
+(1, 3, 2, 'Intermediate to Programming', 5, 4, 'Control Structures', 'This lecture covers control structures in programming.', 'Control Structures Video', 'https://www.youtube.com/watch?v=jkl456'),
+(1, 3, 2, 'Intermediate to Programming', 5, 5, 'Functions and Modules', 'This lecture covers functions and modules in programming.', 'Functions and Modules Video', 'https://www.youtube.com/watch?v=mno789');
+
+
+
+

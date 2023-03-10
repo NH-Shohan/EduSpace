@@ -1,3 +1,8 @@
+<?php
+session_start();
+
+require_once './../../Controller/db_connect.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 

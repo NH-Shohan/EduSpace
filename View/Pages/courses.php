@@ -1,5 +1,7 @@
 <?php
 session_start();
+
+require_once './../../Controller/db_connect.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -209,7 +211,8 @@ session_start();
         }
 
         .course-card {
-            flex: 0 0 calc(33.33% - 20px);
+            /* flex: 0 0 calc(33.33% - 20px); */
+            min-width: 300px;
             margin-right: 20px;
             background-color: #fff;
             box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
@@ -224,6 +227,8 @@ session_start();
             width: 100%;
             height: 200px;
             object-fit: cover;
+            background-color: var(--darkText);
+            padding: 10px;
         }
 
         .course-details {
@@ -231,6 +236,7 @@ session_start();
         }
 
         .course-details h3 {
+            text-align: left;
             font-size: 24px;
             margin: 0;
             margin-bottom: 10px;
@@ -255,22 +261,38 @@ session_start();
             cursor: pointer;
             z-index: 1;
             transition: opacity 0.2s ease-in-out;
-        }
 
-        .slider-buttons:hover {
-            opacity: 0.8;
         }
 
         .slider-button-left {
             left: 20px;
-            border-top-right-radius: 50%;
-            border-bottom-right-radius: 50%;
+            background-color: var(--primary);
+            height: 30vh;
+            padding: 0 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.7;
         }
+
+        .slider-button-left:hover {
+            opacity: 0.6;
+        }
+
 
         .slider-button-right {
             right: 20px;
-            border-top-left-radius: 50%;
-            border-bottom-left-radius: 50%;
+            padding: 0 5px;
+            background-color: var(--primary);
+            height: 30vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.8;
+        }
+
+        .slider-button-right:hover {
+            opacity: 0.6;
         }
 
         i {
@@ -310,6 +332,7 @@ session_start();
         }
 
         h2 {
+            color: var(--text);
             font-size: 36px;
             text-align: center;
             margin-bottom: 40px;
@@ -317,50 +340,92 @@ session_start();
 
         .course-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            justify-items: space-between;
             /* display: flex;
             flex-wrap: wrap;
             justify-content: center; */
         }
 
         .course-card {
-            width: 300px;
+            width: 340px;
             margin: 20px;
-            padding: 20px;
+            /* padding: 20px; */
             background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            text-align: center;
+            /* text-align: center; */
         }
+
+
 
         .course-card img {
             width: 100%;
             height: 200px;
-            object-fit: cover;
-            margin-bottom: 20px;
+            object-fit: contain;
+            /* margin-bottom: 20px; */
+            /* margin: -20px; */
         }
 
         .course-card h3 {
-            font-size: 24px;
+            font-size: clamp(18px, 6vw, 24px);
             margin-bottom: 10px;
         }
 
         .course-card p {
-            font-size: 18px;
+            font-size: clamp(14px, 6vw, 18px);
             margin-bottom: 20px;
         }
 
         .course-card a {
             display: inline-block;
             padding: 10px 20px;
-            background-color: #007bff;
+            background-color: var(--darkText);
             color: #fff;
             text-decoration: none;
             border-radius: 5px;
             font-size: 18px;
         }
 
+        .recommended {
+            flex: 0 0 calc(31%-20px) !important;
+            /* flex: flex-grow flex-shrink flex-basis */
+            /* 
+            flex-grow: Determines how much the item should grow in relation to the other items in the container. In this case, it's set to 0, which means it won't grow.
+
+            flex-shrink: Determines how much the item should shrink in relation to the other items in the container. In this case, it's also set to 0, which means it won't shrink.
+
+            flex-basis: Specifies the initial size of the item before any remaining space is distributed. Here, it's set to calc(30% - 20px). This means the item should take up 30% of the available space minus 20 pixels.
+            */
+            min-width: 300px;
+            margin-right: 20px;
+            background-color: #fff;
+            box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .recommended h3 {
+
+            font-size: clamp(16px, 6vw, 22px);
+        }
+
+        .recommended img {
+            width: 100%;
+            height: 150px;
+        }
+
+        .course-card p {
+            font-size: clamp(12px, 6vw, 16px);
+            margin-bottom: 20px;
+        }
+
         .course-card a:hover {
-            background-color: #0069d9;
+            background-color: var(--secondaryText);
+        }
+
+        .courseImg {
+            margin: 0 -20px;
+            padding: 20px 0;
+            background-color: var(--darkText);
         }
     </style>
 </head>
@@ -405,7 +470,7 @@ session_start();
             <div class="hero-text">
                 <h1>Learn Anything Online</h1>
                 <p>Get access to thousands of courses taught by industry experts</p>
-                <a href="#" class="button">Explore Courses</a>
+                <a href="#all-course" class="button">Explore Courses</a>
             </div>
         </div>
 
@@ -415,55 +480,41 @@ session_start();
             <div class="slider-container">
                 <div class="slider-track">
                     <?php
-                    // Recommended courses array
-                    $recommendedCourses = array(
-                        array(
-                            'title' => 'Introduction to Web Development',
-                            'image' => 'https://img-c.udemycdn.com/course/480x270/2462140_b27f_2.jpg',
-                            'price' => '$49.99'
-                        ),
-                        array(
-                            'title' => 'Java Programming for Beginners',
-                            'image' => 'https://img-c.udemycdn.com/course/480x270/2462140_b27f_2.jpg',
-                            'price' => '$59.99'
-                        ),
-                        array(
-                            'title' => 'Python Data Science Essentials',
-                            'image' => 'https://img-c.udemycdn.com/course/480x270/2462140_b27f_2.jpg',
-                            'price' => '$69.99'
-                        ),
-                        array(
-                            'title' => 'Learn Photoshop CC 2021',
-                            'image' => 'https://img-c.udemycdn.com/course/480x270/2462140_b27f_2.jpg',
-                            'price' => '$79.99'
-                        ),
-                        array(
-                            'title' => 'Complete iOS Development Course',
-                            'image' => 'https://img-c.udemycdn.com/course/480x270/2462140_b27f_2.jpg',
-                            'price' => '$89.99'
-                        ),
-                        array(
-                            'title' => 'Digital Marketing Fundamentals',
-                            'image' => 'https://img-c.udemycdn.com/course/480x270/2462140_b27f_2.jpg',
-                            'price' => '$99.99'
-                        )
-                    );
+                    // select all records from the courses table
+                    $sql = "SELECT * FROM recommended_courses JOIN courses ON recommended_courses.course_id = courses.course_id";
+                    $result = $conn->query($sql);
+                    if ($result->num_rows > 0) {
+                        // output data of each row
+                        while ($row = $result->fetch_assoc()) {
+                            ?>
+                            <div class="course-card recommended">
 
-                    // Assuming $recommendedCourses is an array of recommended courses with properties like 'title', 'image', 'price', etc.
-                    foreach ($recommendedCourses as $course) {
-                        ?>
-                        <div class="course-card">
-                            <img src="<?php echo $course['image']; ?>" alt="<?php echo $course['title']; ?>">
-                            <div class="course-details">
-                                <h3>
-                                    <?php echo $course['title']; ?>
-                                </h3>
-                                <p>
-                                    <?php echo $course['price']; ?>
-                                </p>
+                                <div class="course-details">
+                                    <h3>
+                                        <?php echo $row['course_name']; ?>
+                                    </h3>
+                                    <div class="courseImg">
+                                        <img src="<?php echo $row['course_image']; ?>" alt="<?php echo $row['course_name']; ?>">
+                                    </div>
+                                    <p>
+                                        Instructor:
+                                        <?php echo $row['instructor_name']; ?>
+                                    </p>
+                                    <p>
+                                        Rating:
+                                        <?php echo $row['rating']; ?>⭐
+                                    </p>
+                                    <p>
+                                        Fee: BDT
+                                        <?php echo $row['course_fee']; ?>
+                                    </p>
+                                    <a href="showCourse.php?course_id=<?php echo $row['course_id'] ?>">Let's Explore</a>
+                                </div>
                             </div>
-                        </div>
-                        <?php
+                            <?php
+                        }
+                    } else {
+                        echo "No records found";
                     }
                     ?>
                 </div>
@@ -480,56 +531,41 @@ session_start();
 
         <!-- Courses -->
         <section class="all-courses">
-            <div class="container">
+            <div class="container" id="#all-course">
                 <h2>All Courses</h2>
                 <div class="course-cards">
                     <?php
-                    $courses = array(
-                        array(
-                            'title' => 'Introduction to Web Development',
-                            'description' => 'Learn the basics of web development including HTML, CSS, and JavaScript.',
-                            'image' => 'https://img-c.udemycdn.com/course/480x270/2462140_b27f_2.jpg',
-                            'url' => 'https://example.com/courses/introduction-to-web-development',
-                        ),
-                        array(
-                            'title' => 'Intermediate Web Development',
-                            'description' => 'Take your web development skills to the next level with advanced CSS and JavaScript techniques.',
-                            'image' => 'https://img-c.udemycdn.com/course/480x270/2462140_b27f_2.jpg',
-                            'url' => 'https://example.com/courses/intermediate-web-development',
-                        ),
-                        array(
-                            'title' => 'Introduction to Data Science',
-                            'description' => 'Learn the fundamentals of data science including statistics, data analysis, and machine learning.',
-                            'image' => 'https://img-c.udemycdn.com/course/480x270/2462140_b27f_2.jpg',
-                            'url' => 'https://example.com/courses/introduction-to-data-science',
-                        ),
-                        array(
-                            'title' => 'Advanced Data Science',
-                            'description' => 'Take your data science skills to the next level with advanced topics like deep learning and natural language processing.',
-                            'image' => 'https://img-c.udemycdn.com/course/480x270/2462140_b27f_2.jpg',
-                            'url' => 'https://example.com/courses/advanced-data-science',
-                        ),
-                        array(
-                            'title' => 'Introduction to Graphic Design',
-                            'description' => 'Learn the basics of graphic design including typography, color theory, and layout.',
-                            'image' => 'https://img-c.udemycdn.com/course/480x270/2462140_b27f_2.jpg',
-                            'url' => 'https://example.com/courses/introduction-to-graphic-design',
-                        ),
-                        array(
-                            'title' => 'Intermediate Graphic Design',
-                            'description' => 'Take your graphic design skills to the next level with advanced topics like branding and advertising design.',
-                            'image' => 'https://img-c.udemycdn.com/course/480x270/2462140_b27f_2.jpg',
-                            'url' => 'https://example.com/courses/intermediate-graphic-design',
-                        ),
-                    );
-                    // Loop through all courses and display them as cards
-                    foreach ($courses as $course) {
-                        echo '<div class="course-card">';
-                        echo '<img src="' . $course['image'] . '" alt="' . $course['title'] . '">';
-                        echo '<h3>' . $course['title'] . '</h3>';
-                        echo '<p>' . $course['description'] . '</p>';
-                        echo '<a href="' . $course['url'] . '">Learn More</a>';
-                        echo '</div>';
+                    // select all records from the courses table
+                    $sql = "SELECT * FROM courses";
+                    $result = $conn->query($sql);
+                    if ($result->num_rows > 0) {
+                        // output data of each row
+                        while ($row = $result->fetch_assoc()) {
+                            ?>
+                            <div class="course-card">
+                                <img src="<?php echo $row['course_image']; ?>" alt="<?php echo $row['course_name']; ?>">
+                                <div class="course-details">
+                                    <h3>
+                                        <?php echo $row['course_name']; ?>
+                                    </h3>
+                                    <p>
+                                        <?php echo $row['course_category']; ?>
+                                    </p>
+                                    <p>
+                                        Instructor:
+                                        <?php echo $row['instructor_name']; ?>
+                                    </p>
+                                    <p>
+                                        Rating:
+                                        <?php echo $row['rating']; ?>⭐
+                                    </p>
+                                    <a href="#">Let's Explore</a>
+                                </div>
+                            </div>
+                            <?php
+                        }
+                    } else {
+                        echo "No records found";
                     }
                     ?>
                 </div>

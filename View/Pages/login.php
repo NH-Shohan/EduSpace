@@ -1,3 +1,8 @@
+<?php
+session_start();
+
+require_once './../../Controller/db_connect.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,7 +16,6 @@
 
 <body>
     <?php
-    session_start();
     $name = $email = $username = $password = "";
 
     $nameError = $emailError = $usernameError = $passwordError = "";
@@ -57,7 +61,7 @@
                     </div>
                     <p>
                         <label for="email">Email:</label><br />
-                        <input type="text" id="email" name="email" value="<?php echo $email; ?>"><br />
+                        <input type="text" id="email" name="email" value="<?php echo $_SESSION['email']; ?>"><br />
                         <span class="error">
                             <?php
                             if (isset($emailError)) {

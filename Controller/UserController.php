@@ -2,18 +2,7 @@
 <?php
 session_start();
 // Database connection parameters
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "login_system";
-
-// Create a connection object
-$conn = mysqli_connect($servername, $username, $password, $dbname);
-
-// Check connection
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
+require_once 'db_connect.php';
 
 if ($_SESSION["authEvent"] == "logout") {
     setcookie("loggedUser", "", time() - 3600, "/");

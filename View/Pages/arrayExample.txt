@@ -1,0 +1,49 @@
+<?php
+                    $courses = array(
+                        array(
+                            'title' => 'Introduction to Web Development',
+                            'description' => 'Learn the basics of web development including HTML, CSS, and JavaScript.',
+                            'image' => 'https://img-c.udemycdn.com/course/480x270/2462140_b27f_2.jpg',
+                            'url' => 'https://example.com/courses/introduction-to-web-development',
+                        ),
+                        array(
+                            'title' => 'Intermediate Web Development',
+                            'description' => 'Take your web development skills to the next level with advanced CSS and JavaScript techniques.',
+                            'image' => 'https://img-c.udemycdn.com/course/480x270/2462140_b27f_2.jpg',
+                            'url' => 'https://example.com/courses/intermediate-web-development',
+                        ),
+                        array(
+                            'title' => 'Introduction to Data Science',
+                            'description' => 'Learn the fundamentals of data science including statistics, data analysis, and machine learning.',
+                            'image' => 'https://img-c.udemycdn.com/course/480x270/2462140_b27f_2.jpg',
+                            'url' => 'https://example.com/courses/introduction-to-data-science',
+                        ),
+                        array(
+                            'title' => 'Advanced Data Science',
+                            'description' => 'Take your data science skills to the next level with advanced topics like deep learning and natural language processing.',
+                            'image' => 'https://img-c.udemycdn.com/course/480x270/2462140_b27f_2.jpg',
+                            'url' => 'https://example.com/courses/advanced-data-science',
+                        ),
+                        array(
+                            'title' => 'Introduction to Graphic Design',
+                            'description' => 'Learn the basics of graphic design including typography, color theory, and layout.',
+                            'image' => 'https://img-c.udemycdn.com/course/480x270/2462140_b27f_2.jpg',
+                            'url' => 'https://example.com/courses/introduction-to-graphic-design',
+                        ),
+                        array(
+                            'title' => 'Intermediate Graphic Design',
+                            'description' => 'Take your graphic design skills to the next level with advanced topics like branding and advertising design.',
+                            'image' => 'https://img-c.udemycdn.com/course/480x270/2462140_b27f_2.jpg',
+                            'url' => 'https://example.com/courses/intermediate-graphic-design',
+                        ),
+                    );
+                    // Loop through all courses and display them as cards
+                    foreach ($courses as $course) {
+                        echo '<div class="course-card">';
+                        echo '<img src="' . $course['image'] . '" alt="' . $course['title'] . '">';
+                        echo '<h3>' . $course['title'] . '</h3>';
+                        echo '<p>' . $course['description'] . '</p>';
+                        echo '<a href="' . $course['url'] . '">Learn More</a>';
+                        echo '</div>';
+                    }
+                    ?>
