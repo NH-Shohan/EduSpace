@@ -58,7 +58,10 @@ require_once './../../Controller/db_connect.php';
 
             // Loop through the results and create an option for each course
             while ($row = mysqli_fetch_assoc($result)) {
-                echo '<option value="' . $row['course_id'] . '">' . $row['course_name'] . '</option>';
+                ?>
+                <option value="<?php echo $row['course_id'] ?>"><?php echo $row['course_name'] ?></option>
+
+                <?php
             }
 
             // Close the database connection
