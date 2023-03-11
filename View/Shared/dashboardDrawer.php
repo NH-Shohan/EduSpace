@@ -1,3 +1,4 @@
+<?php $page = substr($_SERVER["SCRIPT_NAME"], strrpos($_SERVER["SCRIPT_NAME"], "/") + 1); ?>
 <?php
 // session_start();
 ?>
@@ -54,27 +55,26 @@
             color: green;
             font-size: 14px;
             font-weight: bold;
-            /* margin: 5px 0; */
         }
 
-        .drawer_active::before {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 30px;
-            height: 2px;
-            color: var(--primary);
+        .drawer_active {
+            display: block;
+            text-decoration: none;
+            margin-block: 10px;
+            background-color: var(--text);
+            padding: 10px;
             border-radius: 10px;
+            font-weight: 500;
+            color: var(--primary);
+            transition: 200ms;
         }
     </style>
     <title>Document</title>
-
-    <!-- <link rel="stylesheet" href="dashboardDrawer.css"> -->
 </head>
 
 <body>
-    <?php $page = substr($_SERVER["SCRIPT_NAME"], strrpos($_SERVER["SCRIPT_NAME"], "/") + 1); ?>
+    <?php $page = substr($_SERVER["SCRIPT_NAME"], strrpos($_SERVER["SCRIPT_NAME"], "/") + 1);
+    ?>
     <!-- Responsive -->
     <div class="dashboard_container">
         <div class="dashboard_navlinks">
@@ -85,14 +85,14 @@
             </div>
             <!-- Wrap the links in a div with an id -->
             <div id="menu" class="dashboard_quick_links">
-                <a class="drawer_nav_link <?= $page == 'addCourses.php' ? 'drawer_active' : 'drawer_nav_link'; ?>"
+                <a class="<?= $page === 'addCourses.php' ? 'drawer_active' : 'drawer_nav_link'; ?>"
                     href="./../../../Project/View/Pages/addCourses.php">Add Course</a>
 
-                <a class="drawer_nav_link <?= $page == 'addRecommendedCourse.php' ? 'drawer_active' : 'drawer_nav_link'; ?>"
+                <a class="<?= $page === 'addRecommendedCourse.php' ? 'drawer_active' : 'drawer_nav_link'; ?>"
                     href="./../../../Project/View/Pages/addRecommendedCourse.php">Add Recommended Course</a>
 
-                <a class="drawer_nav_link <?= $page == 'addCoupone.php' ? 'drawer_active' : 'drawer_nav_link'; ?>"
-                    href="./../../../Project/View/Pages/addCoupone.php">Add Coupone</a>
+                <a class="<?= $page === 'addCoupon.php' ? 'drawer_active' : 'drawer_nav_link'; ?>"
+                    href="./../../../Project/View/Pages/addCoupon.php">Add Coupone</a>
             </div>
         </div>
     </div>
