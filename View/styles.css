@@ -19,18 +19,6 @@
 body {
   margin-top: 60px; /* for the fixed navbar */
 }
-/* body {
-  background-image: linear-gradient(
-    270deg,
-    var(--primary),
-    var(--primary),
-    var(--primary),
-    var(--secondary),
-    var(--primary),
-    var(--primary),
-    var(--primary)
-  );
-} */
 
 .navbar-container {
   background-color: white;
@@ -195,7 +183,7 @@ body {
   height: 2px;
   border-radius: 10px;
   background-color: var(--text);
-  transition: opacity 0.3s ease-in-out;
+  transition: opacity 200ms;
 }
 .active::before {
   content: "";
@@ -389,9 +377,9 @@ button:disabled {
   font-size: clamp(1.2rem, 6vw, 2rem);
 }
 
-.login-container {
-  /* height: 100vh; */
-}
+/* .login-container { */
+/* height: 100vh; */
+/* } */
 .error {
   color: red;
   font-size: 14px;
@@ -493,9 +481,9 @@ input {
   .categories-cards .service-card:nth-child(5) {
     grid-column: 2/3;
   }
-  .categories-cards .service-card:nth-child(6) {
-    /* grid-column: 3/4; */
-  }
+  /* .categories-cards .service-card:nth-child(6) { */
+  /* grid-column: 3/4; */
+  /* } */
 }
 @media screen and (max-width: 1100px) {
   .container {

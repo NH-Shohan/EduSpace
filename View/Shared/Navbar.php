@@ -63,6 +63,12 @@
 
                     <a class="nav_link <?= $page == 'podcast.php' ? 'active' : 'nav_link'; ?>"
                         href="./../../../Project/View/Pages/podcast.php">podcast</a>
+
+                    <a class="nav_link <?= $page == 'dashboard.php' ? 'active' : 'nav_link'; ?>"
+                        href="./../../../Project/View/Pages/dashboard.php">Dashboard</a>
+
+                    <a class="nav_link <?= $page == 'addCoupon.php' ? 'active' : 'nav_link'; ?>"
+                        href="./../../../Project/View/Pages/addCoupon.php">Add Coupon</a>
                 </ul>
             </div>
             <!-- Move the auth links inside the menu div -->
@@ -88,7 +94,6 @@
                     </span>
                     <?php
                 }
-
                 ?>
             </div>
         </div>
