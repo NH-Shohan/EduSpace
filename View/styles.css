@@ -20,6 +20,12 @@ body {
   margin-top: 60px; /* for the fixed navbar */
 }
 
+/* Global CSS */
+.heading h1{
+  margin-bottom: 2em;
+  color: var(--text);
+}
+
 .navbar-container {
   background-color: white;
   height: 60px;

@@ -15,6 +15,11 @@ require_once './../../Controller/db_connect.php';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="./../../View/styles.css">
     <style>
+        .heading h1 {
+            margin-bottom: 1em;
+            color: var(--text);
+        }
+
         .dashboard_container {
             height: calc(100vh - 60px);
             display: grid;
@@ -27,6 +32,58 @@ require_once './../../Controller/db_connect.php';
             align-items: center;
             padding: 20px;
         }
+
+        .dashboard_input_container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5%;
+        }
+
+        .dashboard_left_side_input input,
+        .dashboard_right_side_input input,
+        .dashboard_right_side_input textarea {
+            width: 100%;
+            border-radius: 4px;
+            padding: 7px 10px;
+            font-size: 14px;
+            outline: none;
+            margin-bottom: 20px;
+            border-top: none;
+            border-right: none;
+            border-bottom: 2px solid var(--secondaryText2);
+            resize: vertical;
+        }
+
+        .dashboard_left_side_input input:hover,
+        .dashboard_left_side_input input:focus,
+        .dashboard_right_side_input input:hover,
+        .dashboard_right_side_input input:focus,
+        .dashboard_right_side_input textarea:hover,
+        .dashboard_right_side_input textarea:focus {
+            border-bottom: 2px solid var(--text);
+        }
+
+        .dashboard_right_side_input button {
+            padding: 9px;
+            background-color: var(--tertiary);
+            border: none;
+            border-radius: 7px;
+            width: 100%;
+            cursor: pointer;
+            color: var(--primary);
+            font-weight: 500;
+            font-size: 15px;
+            border-bottom: 2px solid var(--secondaryText2);
+            transition: 200ms;
+        }
+
+        .dashboard_right_side_input button:hover {
+            border-bottom: 2px solid var(--tertiary);
+            background-color: var(--text);
+        }
+
+
+        /* Dashboard Navbar Section */
         .dashboard_quick_links {
             color: var(--primary);
             height: 100%;
@@ -46,8 +103,9 @@ require_once './../../Controller/db_connect.php';
             transition: 200ms;
         }
 
-        .dashboard_quick_links .drawer_nav_link:hover {
-            background-color: var(--text);
+        .dashboard_quick_links .drawer_nav_link:hover,
+        {
+        background-color: var(--text);
         }
 
         .error {
@@ -61,11 +119,9 @@ require_once './../../Controller/db_connect.php';
             color: green;
             font-size: 14px;
             font-weight: bold;
-            /* margin: 5px 0; */
         }
-        
     </style>
-    <title>Document</title>
+    <title>EduSpace</title>
 </head>
 
 <body>
@@ -75,7 +131,9 @@ require_once './../../Controller/db_connect.php';
             <?php include "./../../View/Shared/dashboardDrawer.php" ?>
         </div>
 
+
         <div class="dashboard_content_section">
+
             <?php
             // Define variables and initialize with empty values
             $course_name = $course_category = $instructor_name = $instructor_email = $rating = $description = $course_modules = $course_fee = "";
@@ -177,43 +235,52 @@ require_once './../../Controller/db_connect.php';
             }
             ?>
             <form method="post">
-                <label for="course_name">Course name:</label>
-                <input type="text" id="course_name" name="course_name" required>
-                <br>
+                <div class="heading">
+                    <h1>ADD COURSES</h1>
+                </div>
+                <div class="dashboard_input_container">
+                    <div class="dashboard_left_side_input">
+                        <label for="course_name">Course name:</label>
+                        <input class="dashboard_input_field" type="text" id="course_name" name="course_name" required>
+                        <br>
 
-                <label for="course_image">Course image URL:</label>
-                <input type="text" id="course_image" name="course_image">
-                <br>
+                        <label for="course_image">Course image URL:</label>
+                        <input type="text" id="course_image" name="course_image">
+                        <br>
 
-                <label for="course_category">Course category:</label>
-                <input type="text" id="course_category" name="course_category" required>
-                <br>
+                        <label for="course_category">Course category:</label>
+                        <input type="text" id="course_category" name="course_category" required>
+                        <br>
 
-                <label for="instructor_name">Instructor name:</label>
-                <input type="text" id="instructor_name" name="instructor_name" required>
-                <br>
+                        <label for="instructor_name">Instructor name:</label>
+                        <input type="text" id="instructor_name" name="instructor_name" required>
+                        <br>
 
-                <label for="instructor_email">Instructor email:</label>
-                <input type="email" id="instructor_email" name="instructor_email" required>
-                <br>
+                        <label for="instructor_email">Instructor email:</label>
+                        <input type="email" id="instructor_email" name="instructor_email" required>
+                        <br>
 
-                <label for="rating">Rating:</label>
-                <input type="number" id="rating" name="rating" min="0" max="5" step="0.1">
-                <br>
+                        <label for="rating">Rating:</label>
+                        <input type="number" id="rating" name="rating" min="0" max="5" step="0.1">
+                        <br>
+                    </div>
 
-                <label for="description">Course description:</label>
-                <textarea id="description" name="description" rows="5" cols="30" required></textarea>
-                <br>
+                    <div class="dashboard_right_side_input">
+                        <label for="description">Course description:</label>
+                        <textarea id="description" name="description" rows="5" cols="30" required></textarea>
+                        <br>
 
-                <label for="course_modules">Course modules:</label>
-                <textarea id="course_modules" name="course_modules" rows="5" cols="30" required></textarea>
-                <br>
+                        <label for="course_modules">Course modules:</label>
+                        <textarea id="course_modules" name="course_modules" rows="5" cols="30" required></textarea>
+                        <br>
 
-                <label for="course_fee">Course fee:</label>
-                <input type="number" id="course_fee" name="course_fee" min="0" step="0.01">
-                <br>
+                        <label for="course_fee">Course fee:</label>
+                        <input type="number" id="course_fee" name="course_fee" min="0" step="0.01">
+                        <br>
 
-                <button type="submit">Add course</button>
+                        <button type="submit">Add course</button>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
