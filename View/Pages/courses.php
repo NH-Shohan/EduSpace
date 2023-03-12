@@ -13,12 +13,9 @@ require_once './../../Controller/db_connect.php';
     <title>EduSpace</title>
     <link rel="stylesheet" href="./../../View/styles.css">
     <!-- Link to Font Awesome using a CDN -->
-    <!-- Link to Font Awesome using a CDN -->
     <!-- Icon Link -->
     <link rel="stylesheet" href="https://kit.fontawesome.com/4bd420869f.css" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-
-
 
     <style>
         .search-container {
@@ -52,13 +49,14 @@ require_once './../../Controller/db_connect.php';
         .search-container button[type="submit"] {
             border: none;
             outline: none;
-            background-color: var(--darkText);
+            background-color: var(--text);
             color: #fff;
             font-size: 16px;
             padding: 10px 15px;
             margin-left: 10px;
             border-radius: 5px;
             cursor: pointer;
+            transition: background-color 200ms;
         }
 
         .search-container button[type="submit"]:hover {
@@ -67,10 +65,10 @@ require_once './../../Controller/db_connect.php';
 
         /* Category */
         .category-bar {
-            background-color: var(--secondaryText);
+            background-color: var(--darkText);
             padding: 10px;
         }
-
+        
         .category-bar ul {
             list-style: none;
             margin: 0;
@@ -79,24 +77,24 @@ require_once './../../Controller/db_connect.php';
             flex-wrap: wrap;
             justify-content: center;
         }
-
+        
         .category-bar li {
-            margin: 5px 10px;
-
+            margin: 10px;
         }
-
+        
         .category-bar li a {
             color: var(--primary);
             text-decoration: none;
-            font-size: 16px;
-            font-weight: bold;
+            font-size: 14px;
+            font-weight: 500;
             text-transform: uppercase;
             padding: 10px;
-            border-radius: 5px;
+            border-radius: 3px;
+            transition: all 200ms;
         }
 
         .category-bar li a:hover {
-            background-color: var(--darkText);
+            background-color: var(--secondaryText);
             color: #fff;
         }
 
@@ -150,6 +148,7 @@ require_once './../../Controller/db_connect.php';
             background-image: url('https://th.bing.com/th/id/R.3862109c056fe80204d7aef8470150f4?rik=A0oDtIyjEjOjvw&riu=http%3a%2f%2fcdn.wallpapersafari.com%2f1%2f81%2f5Pyr6G.jpg&ehk=ymUXQYxu68NYH1pQ4LI1rFNsB3r8KSXuoVu6svwhZ%2bs%3d&risl=&pid=ImgRaw&r=0');
             background-size: cover;
             background-position: center;
+            box-shadow: inset 0px 0px 400px 110px rgba(0, 0, 0, .7);
             height: 500px;
             position: relative;
         }
@@ -174,19 +173,25 @@ require_once './../../Controller/db_connect.php';
         }
 
         .button {
-            background-color: var(--darkText);
+            background-color: var(--text);
             color: #fff;
             border: none;
             padding: 12px 32px;
             font-size: 16px;
             border-radius: 5px;
             text-decoration: none;
+            transition: all 200ms;
+        }
+
+        .button:hover {
+            background-color: var(--darkText);
         }
 
         /* Recommended */
         /* Recommended Courses Slider */
         .recommended-courses {
             padding: 50px 0;
+            border-radius: 10px;
         }
 
         .recommended-courses h2 {
@@ -261,18 +266,18 @@ require_once './../../Controller/db_connect.php';
             cursor: pointer;
             z-index: 1;
             transition: opacity 0.2s ease-in-out;
-
         }
 
         .slider-button-left {
             left: 20px;
             background-color: var(--primary);
+            border-left: 1px solid var(--text);
             height: 30vh;
             padding: 0 5px;
             display: flex;
             align-items: center;
             justify-content: center;
-            opacity: 0.7;
+            opacity: 0.9;
         }
 
         .slider-button-left:hover {
@@ -284,11 +289,12 @@ require_once './../../Controller/db_connect.php';
             right: 20px;
             padding: 0 5px;
             background-color: var(--primary);
+            border-right: 1px solid var(--text);
             height: 30vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            opacity: 0.8;
+            opacity: 0.9;
         }
 
         .slider-button-right:hover {
@@ -315,9 +321,6 @@ require_once './../../Controller/db_connect.php';
             .slider-buttons {
                 display: none;
             }
-
-
-
         }
 
         /* Courses */
@@ -350,13 +353,10 @@ require_once './../../Controller/db_connect.php';
         .course-card {
             width: 340px;
             margin: 20px;
-            /* padding: 20px; */
             background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            /* text-align: center; */
+            border-radius: 5px;
         }
-
-
 
         .course-card img {
             width: 100%;
@@ -422,10 +422,17 @@ require_once './../../Controller/db_connect.php';
             background-color: var(--secondaryText);
         }
 
+        .course-card img {
+            border-radius: 5px;
+        }
+
         .courseImg {
             margin: 0 -20px;
             padding: 20px 0;
             background-color: var(--darkText);
+        }
+        .all-courses{
+            scroll-behavior: smooth;
         }
     </style>
 </head>
@@ -449,7 +456,6 @@ require_once './../../Controller/db_connect.php';
         <!-- Category -->
         <div class="category-bar">
             <div class="">
-
                 <!-- Add a menu icon -->
                 <span class="icon" onclick="toggleCategoryMenu()">&#9776;</span> <span>Categories</span>
                 <ul>
@@ -488,7 +494,6 @@ require_once './../../Controller/db_connect.php';
                         while ($row = $result->fetch_assoc()) {
                             ?>
                             <div class="course-card recommended">
-
                                 <div class="course-details">
                                     <h3>
                                         <?php echo $row['course_name']; ?>
@@ -531,7 +536,7 @@ require_once './../../Controller/db_connect.php';
 
         <!-- Courses -->
         <section class="all-courses">
-            <div class="container" id="#all-course">
+            <div class="container" id="all-course">
                 <h2>All Courses</h2>
                 <div class="course-cards">
                     <?php
