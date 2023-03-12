@@ -15,7 +15,7 @@ if ($_SESSION["authEvent"] == "logout") {
 // Check if the user submitted the login form
 if ($_SESSION["authEvent"] == "login") {
     if (
-        isset($_SESSION['username']) && isset($_SESSION['password'])
+        isset($_SESSION['email']) && isset($_SESSION['password'])
     ) {
         // Get user input from $_POST superglobal array
         $email = $_SESSION['email'];

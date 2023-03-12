@@ -61,7 +61,7 @@ require_once './../../Controller/db_connect.php';
                     </div>
                     <p>
                         <label for="email">Email:</label><br />
-                        <input type="text" id="email" name="email" value="<?php echo $_SESSION['email']; ?>"><br />
+                        <input type="text" id="email" name="email" value="<?php echo $email; ?>"><br />
                         <span class="error">
                             <?php
                             if (isset($emailError)) {
