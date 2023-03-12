@@ -1,5 +1,6 @@
 <?php
 // session_start();
+// require_once 'Controller/UserController.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -80,11 +81,31 @@
 
                     <?php
                 } else {
+                    function decrypt($data, $key)
+                    {
+                        // Decode the base64-encoded data
+                        $encryptedDataWithIV = base64_decode($data);
+
+                        // Extract the initialization vector and encrypted data from the decoded data
+                        $iv = substr($encryptedDataWithIV, 0, openssl_cipher_iv_length('aes-256-cbc'));
+                        $encryptedData = substr($encryptedDataWithIV, openssl_cipher_iv_length('aes-256-cbc'));
+
+                        // Decrypt the data using AES-256-CBC decryption with the provided key and initialization vector
+                        $decryptedData = openssl_decrypt($encryptedData, 'aes-256-cbc', $key, OPENSSL_RAW_DATA, $iv);
+
+                        // Return the decrypted data
+                        return $decryptedData;
+                    }
+
+                    $encryptedData = $_COOKIE['loggedUser'];
+                    $decryptedData = decrypt($encryptedData, 'secret_key');
+                    $userData = json_decode($decryptedData, true);
+
                     $_SESSION["authEvent"] = "logout";
                     ?>
                     <a class="registration_btn" href="./../../../Project/Controller/UserController.php">Logout</a>
                     <span>
-                        <?php echo $_SESSION['name'] ?>
+                        <?php echo $userData['name'] ?>
                     </span>
                     <?php
                 }

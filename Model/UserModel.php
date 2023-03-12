@@ -1,53 +1,96 @@
 <?php
-// UserModel.php - this is a model class that contains some data and logic for the user registration
-
-class UserModel
+class User
 {
+    private $id;
+    private $name;
+    private $email;
+    private $username;
+    private $password;
+    private $token;
 
-    // this is a method that validates the user input and returns an array of errors if any
-    public function validate($data)
+    public function __construct($name, $email, $username, $password)
     {
-        // initialize an empty array of errors
-        $errors = [];
-
-        // check if the name field is empty
-        if (empty($data['name'])) {
-            // add an error message to the array
-            $errors['name'] = "Name is required";
-        }
-
-        // check if the email field is empty or invalid
-        if (empty($data['email']) || !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-            // add an error message to the array
-            $errors['email'] = "Email is required and must be valid";
-        }
-
-        // check if the password field is empty or too short
-        if (empty($data['password']) || strlen($data['password']) < 8) {
-            // add an error message to the array
-            $errors['password'] = "Password is required and must be at least 8 characters long";
-        }
-
-        // return the array of errors
-        return $errors;
+        $this->name = $name;
+        $this->email = $email;
+        $this->username = $username;
+        $this->password = $password;
     }
 
-    // this is a method that inserts the user data into the database after validation 
-    public function register($data)
+    public function save($conn)
     {
-        // connect to the database using PDO (you can use your own connection details)
-        $db = new PDO("mysql:host=localhost;dbname=login_system", "root", "");
+        $stmt = $conn->prepare("INSERT INTO users (name, email, username, password) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("ssss", $this->name, $this->email, $this->username, $this->password);
+        $stmt->execute();
+        $this->id = $stmt->insert_id;
+        $stmt->close();
+    }
 
-        // prepare a SQL statement to insert the user data into the users table 
-        $stmt = $db->prepare("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)");
+    public static function authenticate($email, $password, $conn)
+    {
+        $stmt = $conn->prepare("SELECT * FROM users WHERE email=?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows == 0) {
+            return null;
+        }
+        $user = $result->fetch_assoc();
+        if (password_verify($password, $user['password'])) {
+            return new User($user['name'], $user['email'], $user['username'], $user['password']);
+        } else {
+            return null;
+        }
+    }
 
-        // bind the parameters with their values from the data array 
-        $stmt->bindParam(":name", $data['name']);
-        $stmt->bindParam(":email", $data['email']);
-        $stmt->bindParam(":password", password_hash($data['password'], PASSWORD_DEFAULT)); // hash the password before storing
+    public function setToken($token, $conn)
+    {
+        $this->token = $token;
+        $stmt = $conn->prepare("UPDATE users SET token=? WHERE id=?");
+        $stmt->bind_param("si", $this->token, $this->id);
+        $stmt->execute();
+        $stmt->close();
+    }
 
-        // execute the statement 
-        return $stmt->execute();
+    public static function getUserFromToken($token, $conn)
+    {
+        $stmt = $conn->prepare("SELECT * FROM users WHERE token=?");
+        $stmt->bind_param("s", $token);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows == 0) {
+            return null;
+        }
+        $user = $result->fetch_assoc();
+        return new User($user['name'], $user['email'], $user['username'], $user['password'], $user['token'], $user['id']);
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    public function getToken()
+    {
+        return $this->token;
     }
 }
-?>
