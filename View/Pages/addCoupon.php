@@ -1,4 +1,9 @@
 <?php
+session_start();
+
+require_once './../../Controller/db_connect.php';
+?>
+<?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!file_exists("coupons.txt")) {
         $file = fopen("coupons.txt", "w");

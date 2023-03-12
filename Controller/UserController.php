@@ -1,9 +1,63 @@
 <!-- PHP code for login and register -->
 <?php
+// session_save_path('/tmp/sessions');
 session_start();
+
 // Database connection parameters
 require_once 'db_connect.php';
 
+// Function to encrypt data
+function encrypt($data, $key)
+{
+    // Generate an initialization vector
+    $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+
+    // Encrypt the data using AES-256-CBC encryption with the provided key and initialization vector
+    $encryptedData = openssl_encrypt($data, 'aes-256-cbc', $key, OPENSSL_RAW_DATA, $iv);
+
+    // Prepend the initialization vector to the encrypted data
+    $encryptedDataWithIV = $iv . $encryptedData;
+
+    // Base64-encode the encrypted data with the initialization vector and return it
+    return base64_encode($encryptedDataWithIV);
+}
+
+
+// Function to decrypt data
+function decrypt($data, $key)
+{
+    // Decode the base64-encoded data
+    $encryptedDataWithIV = base64_decode($data);
+
+    // Extract the initialization vector and encrypted data from the decoded data
+    $iv = substr($encryptedDataWithIV, 0, openssl_cipher_iv_length('aes-256-cbc'));
+    $encryptedData = substr($encryptedDataWithIV, openssl_cipher_iv_length('aes-256-cbc'));
+
+    // Decrypt the data using AES-256-CBC decryption with the provided key and initialization vector
+    $decryptedData = openssl_decrypt($encryptedData, 'aes-256-cbc', $key, OPENSSL_RAW_DATA, $iv);
+
+    // Return the decrypted data
+    return $decryptedData;
+}
+
+
+function setDataCookie($user)
+{
+    $userData = array();
+    foreach ($user as $key => $value) {
+        if ($key != 'password') {
+            $userData[$key] = $value;
+        }
+    }
+    $encryptedData = encrypt(json_encode($userData), 'secret_key');
+    $secureFlag = true;
+    $httpOnlyFlag = true;
+
+    // Cookie set
+    setcookie("loggedUser", $encryptedData, time() + 86400, "/", "", $secureFlag, $httpOnlyFlag);
+}
+
+// Login/Logout/Registration authentication
 if ($_SESSION["authEvent"] == "logout") {
     setcookie("loggedUser", "", time() - 3600, "/");
     $_SESSION['name'] = "";
@@ -43,8 +97,11 @@ if ($_SESSION["authEvent"] == "login") {
 
                 // Redirect to a welcome page
 
+                if ($user) {
+                    setDataCookie($user);
+                }
                 $_SESSION["authEvent"] = "";
-                setcookie("loggedUser", $email, time() + 86400, "/");
+                // setcookie("loggedUser", $email, time() + 86400, "/");
                 header("Location: welcome.php");
             } else {
                 // Password is incorrect, display an error message
@@ -100,7 +157,7 @@ if (
 
             $_SESSION["authEvent"] = "";
             echo "User registered successfully.";
-            setcookie("loggedUser", $email, time() + 86400, "/");
+            setDataCookie($user);
 
         } else {
             // User data insertion failed, display an error message 
