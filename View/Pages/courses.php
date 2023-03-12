@@ -13,12 +13,9 @@ require_once './../../Controller/db_connect.php';
     <title>EduSpace</title>
     <link rel="stylesheet" href="./../../View/styles.css">
     <!-- Link to Font Awesome using a CDN -->
-    <!-- Link to Font Awesome using a CDN -->
     <!-- Icon Link -->
     <link rel="stylesheet" href="https://kit.fontawesome.com/4bd420869f.css" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-
-
 
     <style>
         .search-container {
@@ -68,7 +65,7 @@ require_once './../../Controller/db_connect.php';
 
         /* Category */
         .category-bar {
-            background-color: var(--tertiary);
+            background-color: var(--darkText);
             padding: 10px;
         }
         
@@ -82,14 +79,14 @@ require_once './../../Controller/db_connect.php';
         }
         
         .category-bar li {
-            margin-inline: 10px;
+            margin: 10px;
         }
         
         .category-bar li a {
             color: var(--primary);
             text-decoration: none;
-            font-size: 16px;
-            font-weight: bold;
+            font-size: 14px;
+            font-weight: 500;
             text-transform: uppercase;
             padding: 10px;
             border-radius: 3px;
@@ -97,7 +94,7 @@ require_once './../../Controller/db_connect.php';
         }
 
         .category-bar li a:hover {
-            background-color: var(--text);
+            background-color: var(--secondaryText);
             color: #fff;
         }
 
