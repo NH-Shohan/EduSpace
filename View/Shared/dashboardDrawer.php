@@ -69,7 +69,7 @@
             transition: 200ms;
         }
     </style>
-    <title>Document</title>
+    <title>Dashboard</title>
 </head>
 
 <body>
@@ -85,6 +85,9 @@
             </div>
             <!-- Wrap the links in a div with an id -->
             <div id="menu" class="dashboard_quick_links">
+                <a class="<?= $page === 'dashboard.php' ? 'drawer_active' : 'drawer_nav_link'; ?>"
+                    href="./../../../Project/View/Pages/dashboard.php">Dashboard</a>
+
                 <a class="<?= $page === 'addCourses.php' ? 'drawer_active' : 'drawer_nav_link'; ?>"
                     href="./../../../Project/View/Pages/addCourses.php">Add Course</a>
 

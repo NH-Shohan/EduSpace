@@ -360,7 +360,7 @@ if (mysqli_num_rows($result) > 0) {
                 <br>
                 <br>
                 <br>
-                <b>Completed Modules..............</b>
+                <b>Completed Modules</b>
                 <div class="doneList">
                     <!-- done list will load here -->
                 </div>
@@ -403,9 +403,6 @@ if (mysqli_num_rows($result) > 0) {
                 videoImage.setAttribute("src", videoUrl);
                 title.innerText = link.innerText;
                 details.innerText = link.getAttribute("description");
-
-
-
             });
         });
 
@@ -482,7 +479,6 @@ if (mysqli_num_rows($result) > 0) {
             });
         });
     </script>
-
 </body>
 
 </html>
