@@ -2,6 +2,76 @@
 session_start();
 
 require_once './../../Controller/db_connect.php';
+
+$course_id = $_GET['course_id'];
+$sql = "SELECT * FROM login_system.course_content WHERE course_id = $course_id ORDER BY moduleNumber, lectureNumber";
+$result = mysqli_query($conn, $sql);
+$modules = array();
+$banner = "";
+$courseName = "";
+$description = "";
+$courseFee = 0;
+$noContent = false;
+
+// Select data from the courses table where course_id is 1
+$sql2 = "SELECT * FROM courses WHERE course_id = $course_id";
+$result2 = $conn->query($sql2);
+
+// Display the selected data
+if ($result2->num_rows > 0) {
+    // Output data of each row
+    while ($row2 = mysqli_fetch_assoc($result2)) {
+        $banner = $row2["course_image"];
+        $courseName = $row2["course_name"];
+        $courseFee = $row2["course_fee"];
+        $description = $row2["description"];
+        // And so on for the other columns in the table
+    }
+}
+
+if (mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $module_id = $row['moduleNumber'];
+        // $banner = $row['course_image'];
+        if (!isset($modules[$module_id])) {
+            $modules[$module_id] = array(
+                'name' => $row['moduleName'],
+                'lectures' => array(),
+            );
+        }
+
+        $modules[$module_id]['lectures'][] = array(
+            'name' => $row['lectureName'],
+            'lectureDescription' => $row['lectureDescription'],
+            'url' => $row['lectureVideoLinks'],
+        );
+    }
+} else {
+    $noContent = true;
+}
+?>
+
+<?php
+$discounted_price = $courseFee;
+$coupon_err = "";
+$coupon_suc = "";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $coupon_code = $_POST["coupon_code"];
+
+
+    $coupons = file("coupons.txt", FILE_IGNORE_NEW_LINES);
+
+    if (in_array($coupon_code, $coupons)) {
+        // Coupon code matched, apply 20% discount
+        $discounted_price = $courseFee * 0.8;
+        $coupon_suc = "Coupon applied successfully. You got 20% offer discount!";
+    } else {
+        // Coupon code did not match
+        $coupon_err = "Sorry, your coupon code was incorrect.";
+
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,12 +87,22 @@ require_once './../../Controller/db_connect.php';
 
     <style>
         .background_color {
-            background-color: var(--darkText);
-            position: absolute;
             top: 0;
             width: calc(100vw - 18px);
-            height: 60vh;
             z-index: -1;
+            padding-bottom: 20vh;
+            /* position: absolute; */
+        }
+
+        .heading-title {
+
+            height: 50vh;
+            background-color: var(--darkText);
+            position: absolute;
+            padding-top: 100px;
+            top: 0;
+            width: 100%;
+            left: 0;
         }
 
         .show_course_details_container {
@@ -47,7 +127,8 @@ require_once './../../Controller/db_connect.php';
             border-radius: 5px;
             padding: 1em;
             position: sticky;
-            top: 110px;
+            margin-top: -80px;
+            top: 120px;
         }
 
         .course_price {
@@ -190,21 +271,28 @@ require_once './../../Controller/db_connect.php';
         <div class="background_color"></div>
         <div class="show_course_details_container">
             <div class="show_course_details">
-                <h1>The Complete 2023 Web Development Bootcamp</h1>
-                <p>Become a Full-Stack Web Developer with just ONE course. HTML, CSS, Javascript, Node, React, MongoDB,
-                    Web3 and DApps</p>
-                <div>
-                    <p class="show_course_tag">Bestseller</p>
-                    <div class="course_ratings">
-                        <p>4.7
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star-half-stroke"></i>
+                <div class="heading-title">
+                    <div class="container">
+                        <h1>
+                            <?php echo $courseName; ?>
+                        </h1>
+                        <p>
+                            <?php echo $description; ?>
                         </p>
-                        <p>(269,657 ratings)</p>
-                        <small>914,966 students</small>
+                        <div class="">
+                            <p class="show_course_tag">Bestseller</p>
+                            <div class="course_ratings">
+                                <p>4.7
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star-half-stroke"></i>
+                                </p>
+                                <p>(269,657 ratings)</p>
+                                <small>914,966 students</small>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -228,15 +316,22 @@ require_once './../../Controller/db_connect.php';
                 <div class="course_description">
                     <b>Description</b>
                     <br>
-                    Do you want to become a programmer? Do you want to learn how to create games, automate your browser, visualize data, and much more?
+                    Do you want to become a programmer? Do you want to learn how to create games, automate your browser,
+                    visualize data, and much more?
                     <br>
-                    If you’re looking to learn Python for the very first time or need a quick brush-up, this is the course for you!
+                    If you’re looking to learn Python for the very first time or need a quick brush-up, this is the
+                    course for you!
                     <br>
 
-                    Python has rapidly become one of the most popular programming languages around the world. Compared to other languages such as Java or C++, Python consistently outranks and outperforms these languages in demand from businesses and job availability. The average Python developer makes over $100,000 - this number is only going to grow in the coming years.
+                    Python has rapidly become one of the most popular programming languages around the world. Compared
+                    to other languages such as Java or C++, Python consistently outranks and outperforms these languages
+                    in demand from businesses and job availability. The average Python developer makes over $100,000 -
+                    this number is only going to grow in the coming years.
                     <br>
 
-                    The best part? Python is one of the easiest coding languages to learn right now. It doesn’t matter if you have no programming experience or are unfamiliar with the syntax of Python. By the time you finish this course, you'll be an absolute pro at programming!
+                    The best part? Python is one of the easiest coding languages to learn right now. It doesn’t matter
+                    if you have no programming experience or are unfamiliar with the syntax of Python. By the time you
+                    finish this course, you'll be an absolute pro at programming!
                     <br>
 
                     This course will cover all the basics and several advanced concepts of Python. We’ll go over:
@@ -250,32 +345,48 @@ require_once './../../Controller/db_connect.php';
                     <li>Regex parsing and Task Management</li>
                     <li>GUI and Gaming with Tkinter</li>
                     <li>And much more!</li>
-                    If you read the above list and are feeling a bit confused, don’t worry! As an instructor and student on Udemy for almost 4 years, I know what it’s like to be overwhelmed with boring and mundane. I promise you’ll have a blast learning the ins and outs of python. I’ve successfully taught over 200,000+ students from over 200 countries jumpstart their programming journeys through my courses.
+                    If you read the above list and are feeling a bit confused, don’t worry! As an instructor and student
+                    on Udemy for almost 4 years, I know what it’s like to be overwhelmed with boring and mundane. I
+                    promise you’ll have a blast learning the ins and outs of python. I’ve successfully taught over
+                    200,000+ students from over 200 countries jumpstart their programming journeys through my courses.
                     <br>
 
                     Here’s what some of my students have to say:
                     <br>
 
-                    “I wish I started programming at a younger age like Avi. This Python course was excellent for those that cringe at the thought of starting over from scratch with attempts to write programs once again. Python is a great building language for any beginner programmer. Thank you Avi!”
+                    “I wish I started programming at a younger age like Avi. This Python course was excellent for those
+                    that cringe at the thought of starting over from scratch with attempts to write programs once again.
+                    Python is a great building language for any beginner programmer. Thank you Avi!”
                     <br>
-                    “I had no idea about any programming language. With Avi's lectures, I'm now aware of several python concepts and I'm beginning to write my own programs. Avi is crisp and clear in his lectures and it is easy to catch the concepts and the depth of it through his explanations. Thanks, Avi for the wonderful course, You're awesome! It's helping me a lot :)”
+                    “I had no idea about any programming language. With Avi's lectures, I'm now aware of several python
+                    concepts and I'm beginning to write my own programs. Avi is crisp and clear in his lectures and it
+                    is easy to catch the concepts and the depth of it through his explanations. Thanks, Avi for the
+                    wonderful course, You're awesome! It's helping me a lot :)”
                     <br>
-                    "Videos are short and concise and well-defined in their title, this makes them easy to refer back to when a refresher is needed. Explanations aren't convoluted with complicated examples, which adds to the quick pace of the videos. I am very pleased with the decision to enroll in this course. Not only has it increased the pace I'm learning Python but I actively look forward to continuing the course, whenever I get the chance. Avi is friendly and energetic, absolutely delightful as an instructor.”
+                    "Videos are short and concise and well-defined in their title, this makes them easy to refer back to
+                    when a refresher is needed. Explanations aren't convoluted with complicated examples, which adds to
+                    the quick pace of the videos. I am very pleased with the decision to enroll in this course. Not only
+                    has it increased the pace I'm learning Python but I actively look forward to continuing the course,
+                    whenever I get the chance. Avi is friendly and energetic, absolutely delightful as an instructor.”
                     <br>
 
-                    So what are you waiting for? Jumpstart your programming journey and dive into the world of Python by enrolling in this course today!
+                    So what are you waiting for? Jumpstart your programming journey and dive into the world of Python by
+                    enrolling in this course today!
                 </div>
             </div>
 
             <div class="show_course_cart">
                 <div class="course_cart">
                     <div class="course_price">
-                        <b>$16.99</b>
-                        <p>$99.99 83% off</p>
+                        <b>৳
+                            <?php echo $discounted_price; ?>
+                        </b>
+                        <p>Add Coupon to get upto 30% offer</p>
                     </div>
 
                     <button class="add_to_cart_btn" type="button">Add to cart</button>
-                    <button class="buy_course_btn" type="button">Buy now</button>
+                    <a href="showCourse.php?course_id=<?php echo $course_id ?>"> <button class="buy_course_btn"
+                            type="button">Buy now</button> </a>
 
                     <p class="info_message">30-Day Money-Back Guarantee</p>
 
@@ -291,8 +402,27 @@ require_once './../../Controller/db_connect.php';
                         <p>Certificate of completion</p>
                     </div>
 
-                    <input class="coupon_input coupon_input_filed" type="text" name="coupone" placeholder="Your Coupon">
-                    <input class="coupon_input coupon_btn" type="button" value="Add Coupon">
+                    <form method="post">
+                        <input class="coupon_input coupon_input_filed" type="text" name="coupon_code"
+                            placeholder="Your Coupon">
+                        <?php
+                        if ($coupon_err) {
+                            ?>
+                            <p class="error">
+                                <?php echo $coupon_err; ?>
+                            </p><br />
+                            <?php
+                        } else {
+                            ?>
+                            <p class="success">
+                                <?php echo $coupon_suc; ?>
+                            </p><br />
+                            <?php
+                        }
+                        ?>
+                        <input class="coupon_input coupon_btn" type="submit" value="Add Coupon">
+
+                    </form>
                 </div>
             </div>
         </div>

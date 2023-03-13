@@ -62,8 +62,7 @@ if ($_SESSION["authEvent"] == "logout") {
     setcookie("loggedUser", "", time() - 3600, "/");
     $_SESSION['name'] = "";
     $_SESSION["authEvent"] == "";
-    // header("Location: index.php");
-    echo "logged out";
+    header("Location: ./../index.php");
 }
 // echo $_SESSION["authEvent"];
 // Check if the user submitted the login form
@@ -102,7 +101,9 @@ if ($_SESSION["authEvent"] == "login") {
                 }
                 $_SESSION["authEvent"] = "";
                 // setcookie("loggedUser", $email, time() + 86400, "/");
-                header("Location: welcome.php");
+                $previous_url = $_SESSION["previousURL"];
+                // echo $previous_url;
+                header("Location: ./../index.php");
             } else {
                 // Password is incorrect, display an error message
                 header("Location: ./../View/Pages/login.php?error=Wrong password.");

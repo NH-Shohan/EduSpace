@@ -68,7 +68,7 @@ require_once './../../Controller/db_connect.php';
             background-color: var(--darkText);
             padding: 10px;
         }
-        
+
         .category-bar ul {
             list-style: none;
             margin: 0;
@@ -77,11 +77,11 @@ require_once './../../Controller/db_connect.php';
             flex-wrap: wrap;
             justify-content: center;
         }
-        
+
         .category-bar li {
             margin: 10px;
         }
-        
+
         .category-bar li a {
             color: var(--primary);
             text-decoration: none;
@@ -431,7 +431,8 @@ require_once './../../Controller/db_connect.php';
             padding: 20px 0;
             background-color: var(--darkText);
         }
-        .all-courses{
+
+        .all-courses {
             scroll-behavior: smooth;
         }
     </style>
@@ -513,7 +514,7 @@ require_once './../../Controller/db_connect.php';
                                         Fee: BDT
                                         <?php echo $row['course_fee']; ?>
                                     </p>
-                                    <a href="showCourse.php?course_id=<?php echo $row['course_id'] ?>">Let's Explore</a>
+                                    <a href="showCourseDetails.php?course_id=<?php echo $row['course_id'] ?>">Let's Explore</a>
                                 </div>
                             </div>
                             <?php
@@ -535,8 +536,8 @@ require_once './../../Controller/db_connect.php';
         </section>
 
         <!-- Courses -->
-        <section class="all-courses">
-            <div class="container" id="all-course">
+        <section class="all-courses" id="all-course">
+            <div class="container">
                 <h2>All Courses</h2>
                 <div class="course-cards">
                     <?php
@@ -564,7 +565,7 @@ require_once './../../Controller/db_connect.php';
                                         Rating:
                                         <?php echo $row['rating']; ?>⭐
                                     </p>
-                                    <a href="#">Let's Explore</a>
+                                    <a href="showCourseDetails.php?course_id=<?php echo $row['course_id'] ?>">Let's Explore</a>
                                 </div>
                             </div>
                             <?php

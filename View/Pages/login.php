@@ -2,6 +2,8 @@
 session_start();
 
 require_once './../../Controller/db_connect.php';
+
+$_SESSION["previousURL"] = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,6 +18,7 @@ require_once './../../Controller/db_connect.php';
 
 <body>
     <?php
+
     $name = $email = $username = $password = "";
 
     $nameError = $emailError = $usernameError = $passwordError = "";
@@ -36,6 +39,8 @@ require_once './../../Controller/db_connect.php';
         }
         if (!empty($email) && !empty($password)) {
             $_SESSION["authEvent"] = "login";
+            // $_SESSION["previousURL"] = "";
+            // echo $_SESSION["previousURL"];
             header("Location: ./../../Controller/UserController.php");
         }
     }
