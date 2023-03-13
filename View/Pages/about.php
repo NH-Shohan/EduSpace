@@ -23,6 +23,8 @@ require_once './../../Controller/db_connect.php';
             text-align: center;
             margin-top: 50px;
             padding: 150px;
+            font-size: 30px;
+            box-shadow: inset 0px 0px 400px 110px rgba(0, 0, 0, .7);
         }
 
         /*journey of Eduspace part  */
@@ -158,26 +160,19 @@ require_once './../../Controller/db_connect.php';
 
 <body>
     <?php include "./../../View/Shared/Navbar.php" ?>
-    <div class="about">
-        <section class="about_top img-fluid">
-            <h1>About</h1>
-        </section>
-        <section class="about_eduspace container">
-            <div class="About_eduspace">
-                <h1 class="about-tittle About-tittle-header">Journey of<span id="part-about-tittle"> EduSpace</span>
-                </h1>
-                <P class="about-para">EduSpace is an online learning platform that offers a wide variety of courses
-                    taught
-                    by expert instructors. The courses cover a broad range of topics, from coding and web development to
-                    business and personal development. Users can enroll in courses individually or sign up for a
-                    subscription that provides access to all courses on the platform.</P>
-                <a src=""><button class="about-btn">Explore more <i class="fa-solid fa-arrow-right"></i></button></a>
-            </div>
-            <div>
-                <img src="https://themesflat.co/html/educate/images/services/1.jpg" alt="">
-            </div>
-        </section>
-    </div>
+    <section class="about_top img-fluid">
+        <h1>About</h1>
+    </section>
+    <section class="about_eduspace">
+        <div class="About_eduspace">
+            <h1 class="about-tittle About-tittle-header">Journey of<span id="part-about-tittle"> EduSpace</span></h1>
+            <P class="about-para">EduSpace is an online learning platform that offers a wide variety of courses taught by expert instructors. The courses cover a broad range of topics, from coding and web development to business and personal development. Users can enroll in courses individually or sign up for a subscription that provides access to all courses on the platform.</P>
+            <a src=""><button class="about-btn">Explore more <i class="fa-solid fa-arrow-right"></i></button></a>
+        </div>
+        <div>
+            <img src="../Assets/About.svg" alt="">
+        </div>
+    </section>
     <?php include "./../../View/Shared/Footer.php" ?>
 
     <!-- for Navbar Responsive -->
