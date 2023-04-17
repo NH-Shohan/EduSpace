@@ -19,9 +19,12 @@
 body {
   margin-top: 60px; /* for the fixed navbar */
 }
+a {
+  text-decoration: none;
+}
 
 /* Global CSS */
-.heading h1{
+.heading h1 {
   margin-bottom: 2em;
   color: var(--text);
 }

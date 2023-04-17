@@ -4,6 +4,7 @@ session_start();
 require_once './../../Controller/db_connect.php';
 ?>
 <?php
+$msg = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!file_exists("coupons.txt")) {
         $file = fopen("coupons.txt", "w");
@@ -18,12 +19,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $file = fopen("coupons.txt", "a");
                 fwrite($file, $new_coupon_code . "\n");
                 fclose($file);
-                echo "Coupon code added successfully.";
+                $msg = "Coupon code added successfully.";
             } else {
-                echo "Coupon code already exists.";
+                $msg = "Coupon code already exists.";
             }
         } else {
-            echo "Coupon code cannot be empty.";
+            $msg = "Coupon code cannot be empty.";
         }
     } else if (isset($_POST["delete_coupon_code"])) {
         $delete_coupon_code = $_POST["delete_coupon_code"];
@@ -38,12 +39,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     fwrite($file, $coupon . "\n");
                 }
                 fclose($file);
-                echo "Coupon code deleted successfully.";
+                $msg = "Coupon code deleted successfully.";
             } else {
-                echo "Sorry, there was an error deleting the coupon code.";
+                $msg = "Sorry, there was an error deleting the coupon code.";
             }
         } else {
-            echo "Please select a valid coupon code to delete.";
+            $msg = "Please select a valid coupon code to delete.";
         }
     }
 }
@@ -215,6 +216,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         }
                         ?>
                     </select>
+                    <p>
+                        <?php echo $msg; ?>
+                    </p>
                     <button class="delete_button" type="submit">Delete Coupon</button>
                 </form>
             </div>

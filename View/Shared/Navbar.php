@@ -81,7 +81,7 @@
 
                     <?php
                 } else {
-                    function decrypt($data, $key)
+                    function decryptNav($data, $key)
                     {
                         // Decode the base64-encoded data
                         $encryptedDataWithIV = base64_decode($data);
@@ -98,14 +98,16 @@
                     }
 
                     $encryptedData = $_COOKIE['loggedUser'];
-                    $decryptedData = decrypt($encryptedData, 'secret_key');
+                    $decryptedData = decryptNav($encryptedData, 'secret_key');
                     $userData = json_decode($decryptedData, true);
 
                     $_SESSION["authEvent"] = "logout";
                     ?>
                     <a class="registration_btn" href="./../../../Project/Controller/UserController.php">Logout</a>
                     <span>
-                        <?php echo $userData['name'] ?>
+                        <a style="color:var(--darkText);" href="./../../../Project/View/Pages/profile.php">
+                            <?php echo $userData['name'] ?>
+                        </a>
                     </span>
                     <?php
                 }

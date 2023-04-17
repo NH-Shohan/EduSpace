@@ -2,7 +2,32 @@
 session_start();
 
 require_once './../../Controller/db_connect.php';
+$userData = null;
+if (empty($_COOKIE['loggedUser'])) {
+    echo "no logged in user found!";
+} else {
+    function decrypt($data, $key)
+    {
+        // Decode the base64-encoded data
+        $encryptedDataWithIV = base64_decode($data);
+
+        // Extract the initialization vector and encrypted data from the decoded data
+        $iv = substr($encryptedDataWithIV, 0, openssl_cipher_iv_length('aes-256-cbc'));
+        $encryptedData = substr($encryptedDataWithIV, openssl_cipher_iv_length('aes-256-cbc'));
+
+        // Decrypt the data using AES-256-CBC decryption with the provided key and initialization vector
+        $decryptedData = openssl_decrypt($encryptedData, 'aes-256-cbc', $key, OPENSSL_RAW_DATA, $iv);
+
+        // Return the decrypted data
+        return $decryptedData;
+    }
+    $encryptedData = $_COOKIE['loggedUser'];
+    $decryptedData = decrypt($encryptedData, 'secret_key');
+    $userData = json_decode($decryptedData, true);
+}
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -81,18 +106,21 @@ require_once './../../Controller/db_connect.php';
                 <form>
                     <h1 style="color:var(--text)">Profile Information</h1>
                     <label for="name">Name</label>
-                    <input type="text" name="name" />
+                    <input value="<?php echo $userData['name'] ?>" type="text" name="name" />
 
                     <label for="username">User Name</label>
-                    <input type="text" name="username" />
+                    <input value="<?php echo $userData['username'] ?>" type="text" name="username" />
 
                     <label for="email">Email</label>
-                    <input type="email" name="email" />
+                    <input value="<?php echo $userData['email'] ?>" type="email" name="email" />
 
                     <label for="password">Current Password</label>
                     <input type="password" name="password" />
 
-                    <label for="confirmPassword">New Password</label>
+                    <label for="newPassword">New Password</label>
+                    <input type="password" name="confirmPassword" />
+
+                    <label for="confirmPassword">Confirm New Password</label>
                     <input type="password" name="confirmPassword" />
 
                     <button type="submit">SAVE</button>
@@ -101,7 +129,8 @@ require_once './../../Controller/db_connect.php';
             </div>
 
             <div class="profile_image">
-                <img src="https://avatars.githubusercontent.com/u/83342210?s=400&u=023585129a2a6f4b8c59e2b231e665b56e63d0ac&v=4" alt="Image">
+                <img src="https://th.bing.com/th/id/R.b1c131b8da9278bff3be80106c7d2058?rik=PicaGM7Cf6NyMA&pid=ImgRaw&r=0"
+                    alt="Image">
             </div>
         </div>
     </div>

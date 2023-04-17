@@ -15,7 +15,9 @@
             <div class="left">
                 <div>
                     <h3>Learn New Skills Online <br>
-                        With Top <span class="educators">Educators<img style="position: absolute; right: 0; bottom: -10px; width: 100%;" src="View/Assets/educatorsUn.svg" alt="" srcset=""></span>
+                        With Top <span class="educators">Educators<img
+                                style="position: absolute; right: 0; bottom: -10px; width: 100%;"
+                                src="View/Assets/educatorsUn.svg" alt="" srcset=""></span>
                     </h3>
                 </div>
                 <div class="heading-left-body">
@@ -25,9 +27,9 @@
 
                 <div class="heading-button">
                     <div>
-                        <button class="btn btn-with-background">
-                            Start Now
-                        </button>
+                        <a href="View/Pages/courses.php"><button class="btn btn-with-background">
+                                Start Now
+                            </button></a>
                     </div>
                     <div>
                         <button class="btn btn-without-background">

@@ -76,7 +76,6 @@ if ($_SESSION["authEvent"] == "login") {
 
         // Prepare a SQL statement to select user data from the database
         $sql = "SELECT * FROM users WHERE email = '$email'";
-        echo $email;
         // Execute the SQL statement and store the result in a variable
         $result = mysqli_query($conn, $sql);
         // echo $result;
@@ -157,8 +156,16 @@ if (
             // User data inserted successfully, display a success message 
 
             $_SESSION["authEvent"] = "";
-            echo "User registered successfully.";
-            setDataCookie($user);
+            // echo "User registered successfully.";
+            $sqlLogin = "SELECT * FROM users WHERE email = '$email'";
+            $result = mysqli_query($conn, $sqlLogin);
+            if (mysqli_num_rows($result) > 0) {
+                $user = mysqli_fetch_assoc($result);
+                setDataCookie($user);
+            }
+
+            header("Location: ./../View/Pages/profile.php");
+
 
         } else {
             // User data insertion failed, display an error message 
