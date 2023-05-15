@@ -230,7 +230,6 @@ require_once './../../Controller/db_connect.php';
 
                     // Redirect to the courses page
                     header('Location: courses.php');
-                    exit();
                 }
             }
             ?>
