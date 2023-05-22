@@ -482,58 +482,7 @@ require_once './../../Controller/db_connect.php';
         </div>
 
         <!-- Recommended -->
-        <section class="recommended-courses">
-            <h2>Recommended Courses</h2>
-            <div class="slider-container">
-                <div class="slider-track">
-                    <?php
-                    // select all records from the courses table
-                    $sql = "SELECT * FROM recommended_courses JOIN courses ON recommended_courses.course_id = courses.course_id";
-                    $result = $conn->query($sql);
-                    if ($result->num_rows > 0) {
-                        // output data of each row
-                        while ($row = $result->fetch_assoc()) {
-                            ?>
-                            <div class="course-card recommended">
-                                <div class="course-details">
-                                    <h3>
-                                        <?php echo $row['course_name']; ?>
-                                    </h3>
-                                    <div class="courseImg">
-                                        <img src="<?php echo $row['course_image']; ?>" alt="<?php echo $row['course_name']; ?>">
-                                    </div>
-                                    <p>
-                                        Instructor:
-                                        <?php echo $row['instructor_name']; ?>
-                                    </p>
-                                    <p>
-                                        Rating:
-                                        <?php echo $row['rating']; ?>⭐
-                                    </p>
-                                    <p>
-                                        Fee: BDT
-                                        <?php echo $row['course_fee']; ?>
-                                    </p>
-                                    <a href="showCourseDetails.php?course_id=<?php echo $row['course_id'] ?>">Let's Explore</a>
-                                </div>
-                            </div>
-                            <?php
-                        }
-                    } else {
-                        echo "No records found";
-                    }
-                    ?>
-                </div>
-                <div class="slider-buttons">
-                    <div class="slider-button slider-button-left" onclick="moveSlider(-1)">
-                        <i class="fa fa-chevron-left"></i>
-                    </div>
-                    <div class="slider-button slider-button-right" onclick="moveSlider(1)">
-                        <i class="fa fa-chevron-right"></i>
-                    </div>
-                </div>
-            </div>
-        </section>
+
 
         <!-- Courses -->
         <section class="all-courses" id="all-course">
@@ -542,37 +491,44 @@ require_once './../../Controller/db_connect.php';
                 <div class="course-cards">
                     <?php
                     // select all records from the courses table
+                    // select all records from the courses table
                     $sql = "SELECT * FROM courses";
-                    $result = $conn->query($sql);
-                    if ($result->num_rows > 0) {
-                        // output data of each row
-                        while ($row = $result->fetch_assoc()) {
+                    $stmt = oci_parse($conn, $sql);
+                    oci_execute($stmt);
+                    // echo oci_execute($stmt);
+                    // check if any records are found
+                    if (oci_fetch_assoc($stmt)) {
+                        // iterate through each row
+                        while ($row = oci_fetch_assoc($stmt)) {
                             ?>
                             <div class="course-card">
-                                <img src="<?php echo $row['course_image']; ?>" alt="<?php echo $row['course_name']; ?>">
+                                <img src="<?php echo $row['COURSE_IMAGE']; ?>" alt="<?php echo $row['COURSE_NAME']; ?>">
                                 <div class="course-details">
                                     <h3>
-                                        <?php echo $row['course_name']; ?>
+                                        <?php echo $row['COURSE_NAME']; ?>
                                     </h3>
                                     <p>
-                                        <?php echo $row['course_category']; ?>
+                                        <?php echo $row['COURSE_CATEGORY']; ?>
                                     </p>
-                                    <p>
-                                        Instructor:
-                                        <?php echo $row['instructor_name']; ?>
+                                    <p>Instructor:
+                                        <?php echo $row['INSTRUCTOR_NAME']; ?>
                                     </p>
-                                    <p>
-                                        Rating:
-                                        <?php echo $row['rating']; ?>⭐
+                                    <p>Rating:
+                                        <?php echo $row['RATING']; ?>⭐
                                     </p>
-                                    <a href="showCourseDetails.php?course_id=<?php echo $row['course_id'] ?>">Let's Explore</a>
+                                    <a href="showCourseDetails.php?course_id=<?php echo $row['COURSE_ID']; ?>">Let's
+                                        Explore</a>
                                 </div>
                             </div>
                             <?php
                         }
                     } else {
                         echo "No records found";
+                        // echo oci_error();
                     }
+
+                    // close the database connection
+                    oci_close($conn);
                     ?>
                 </div>
             </div>

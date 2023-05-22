@@ -52,25 +52,23 @@ require_once './../../Controller/db_connect.php';
                     </tr>
                     <?php
                     $userMail = $_SESSION['email'];
-                    include('../../Controller/db_connect.php');
-                    $sql = "SELECT * FROM courses WHERE instructor_email = '$userMail'";
-                    $result = mysqli_query($conn, $sql);
-                    if ($result) {
-                        if ($result->num_rows > 0) {
-                            while ($row = $result->fetch_assoc()) {
-                                echo '<tr>
-                                     <td>' . $row["course_name"] . '</td>
-                                     <td>' . $row["instructor_email"] . '</td>
-                                     <td>' . $row["description"] . '</td>
-                                     <td><button><a href="showCourseDetails.php?course_id=' . $row["course_id"] . '">Show</a></button></td>
-                                 </tr>';
-                            }
-                        }
+                    $sql = "SELECT * FROM courses WHERE instructor_email = :userMail";
+                    $stmt = oci_parse($conn, $sql);
+                    oci_bind_by_name($stmt, ":userMail", $userMail);
+                    oci_execute($stmt);
+
+                    while ($row = oci_fetch_assoc($stmt)) {
+                        echo '<tr>
+                <td>' . $row["COURSE_NAME"] . '</td>
+                <td>' . $row["INSTRUCTOR_EMAIL"] . '</td>
+                <td>' . $row["DESCRIPTION"] . '</td>
+                <td><button><a href="showCourse.php?course_id=' . $row["COURSE_ID"] . '">Show</a></button></td>
+            </tr>';
                     }
                     ?>
-
                 </table>
             <?php } ?>
+
 
 
 
@@ -92,28 +90,26 @@ require_once './../../Controller/db_connect.php';
                                 <th>...</th>
                             </tr>
                             <?php
-                            include('../../Controller/db_connect.php');
-                            $sql = "SELECT c.course_id, c.course_name, u.username, ec.date
-                FROM enrolled_courses ec
-                JOIN courses c ON ec.course_id = c.course_id
-                JOIN users u ON ec.user_email = u.email;
-                ";
-                            $result = mysqli_query($conn, $sql);
-                            if ($result) {
-                                if ($result->num_rows > 0) {
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo '<tr>
-                                <td>' . $row["course_name"] . '</td>
-                                <td>' . $row["username"] . '</td>
-                                <td>' . $row["date"] . '</td>
-                                <td><button><a href="showCourseDetails.php?course_id=' . $row["course_id"] . '">Show</a></button></td>
-                                </tr>';
-                                    }
-                                }
+                            $sql = "SELECT c.course_id, c.course_name, u.username, ec.enroll_date
+                            FROM enrolled_courses ec
+                            JOIN courses c ON ec.course_id = c.course_id
+                            JOIN users u ON ec.user_email = u.email";
+                            $stmt = oci_parse($conn, $sql);
+                            oci_execute($stmt);
+
+
+
+                            while ($row = oci_fetch_assoc($stmt)) {
+                                echo '<tr>
+                <td>' . $row["COURSE_NAME"] . '</td>
+                <td>' . $row["USERNAME"] . '</td>
+                <td>' . $row["ENROLL_DATE"] . '</td>
+                <td><button><a href="showCourse.php?course_id=' . $row["COURSE_ID"] . '">Show</a></button></td>
+            </tr>';
                             }
                             ?>
-
                         </table>
+
                     </div>
                     <!-- 2nd table -->
                     <div>
@@ -127,74 +123,61 @@ require_once './../../Controller/db_connect.php';
                                 <th>...</th>
                             </tr>
                             <?php
-                            include('../../Controller/db_connect.php');
-                            $sql = "SELECT * from courses;
-                ";
-                            $result = mysqli_query($conn, $sql);
-                            if ($result) {
-                                if ($result->num_rows > 0) {
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo '<tr>
-                                <td>' . $row["instructor_name"] . '</td>
-                                <td>' . $row["instructor_email"] . '</td>
-                                <td>' . $row["rating"] . '</td>
-                                <td>' . $row["course_name"] . '</td>
-                                <td>' . $row["course_category"] . '</td>
-                                </tr>';
-                                    }
-                                }
+                            $sql = "SELECT * FROM courses";
+                            $stmt = oci_parse($conn, $sql);
+                            oci_execute($stmt);
+
+                            while ($row = oci_fetch_assoc($stmt)) {
+                                echo '<tr>
+                        <td>' . $row["INSTRUCTOR_NAME"] . '</td>
+                        <td>' . $row["INSTRUCTOR_EMAIL"] . '</td>
+                        <td>' . $row["RATING"] . '</td>
+                        <td>' . $row["COURSE_NAME"] . '</td>
+                        <td>' . $row["COURSE_CATEGORY"] . '</td>
+                    </tr>';
                             }
                             ?>
-
                         </table>
                     </div>
                 </div>
-
             <?php } ?>
+
 
             <!--  -->
 
 
             <!-- student -->
             <table class="customers">
-
                 <?php
                 if (isset($_SESSION['email']) && $_SESSION['role'] != 'admin' && $_SESSION['role'] != 'teacher') {
-
                     ?>
                     <tr>
                         <th>Course Name</th>
                         <th>Instructor Name</th>
                         <th>Enrolled In</th>
                         <th>...</th>
-
                     </tr>
 
                     <?php
                     $userMail = $_SESSION['email'];
-                    include('../../Controller/db_connect.php');
+                    $sql = "SELECT c.course_id, c.course_name, c.instructor_name, ec.enroll_date
+                FROM enrolled_courses ec
+                JOIN courses c ON ec.course_id = c.course_id
+                WHERE ec.user_email = :user_email";
+                    $stmt = oci_parse($conn, $sql);
+                    oci_bind_by_name($stmt, ':user_email', $userMail);
+                    oci_execute($stmt);
 
-                    $sql = "SELECT courses.course_id, courses.course_name, courses.instructor_name, enrolled_courses.date
-                    FROM enrolled_courses
-                    JOIN courses ON enrolled_courses.course_id = courses.course_id
-                    WHERE enrolled_courses.user_email = '$userMail ';";
-                    $result = mysqli_query($conn, $sql);
-                    if ($result) {
-                        if ($result->num_rows > 0) {
-                            while ($row = $result->fetch_assoc()) {
-                                echo '<tr>
-                                    <td>' . $row["course_name"] . '</td>
-                                    <td>' . $row["instructor_name"] . '</td>
-                                    <td>' . $row["date"] . '</td>
-                                    <td><button><a href="showCourseDetails.php?course_id=' . $row["course_id"] . '">Show</a></button></td>
-                                    </tr>';
-                            }
-                        }
+                    while ($row = oci_fetch_assoc($stmt)) {
+                        echo '<tr>
+                <td>' . $row["COURSE_NAME"] . '</td>
+                <td>' . $row["INSTRUCTOR_NAME"] . '</td>
+                <td>' . $row["DATE"] . '</td>
+                <td><button><a href="showCourseDetails.php?course_id=' . $row["COURSE_ID"] . '">Show</a></button></td>
+            </tr>';
                     }
                 }
-
                 ?>
-
             </table>
 
             <!--  -->

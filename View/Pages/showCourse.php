@@ -4,50 +4,97 @@ session_start();
 require_once './../../Controller/db_connect.php';
 
 $course_id = $_GET['course_id'];
-$sql = "SELECT * FROM login_system.course_content WHERE course_id = $course_id ORDER BY moduleNumber, lectureNumber";
-$result = mysqli_query($conn, $sql);
+
+
 $modules = array();
 $banner = "";
 $courseName = "";
 $description = "";
 $noContent = false;
 
-// Select data from the courses table where course_id is 1
-$sql2 = "SELECT * FROM courses WHERE course_id = $course_id";
-$result2 = $conn->query($sql2);
+// Select all records from the course_content table for the given course_id
+$sql = "SELECT * FROM course_content WHERE course_id = :course_id ORDER BY moduleNumber, lectureNumber";
+$contentRes = oci_parse($conn, $sql);
+oci_bind_by_name($contentRes, ":course_id", $course_id);
 
-// Display the selected data
-if ($result2->num_rows > 0) {
-    // Output data of each row
-    while ($row2 = mysqli_fetch_assoc($result2)) {
-        $banner = $row2["course_image"];
-        $courseName = $row2["course_name"];
-        $description = $row2["description"];
-        // And so on for the other columns in the table
-    }
-}
+oci_execute($contentRes);
 
-if (mysqli_num_rows($result) > 0) {
-    while ($row = mysqli_fetch_assoc($result)) {
-        $module_id = $row['moduleNumber'];
-        // $banner = $row['course_image'];
-        if (!isset($modules[$module_id])) {
-            $modules[$module_id] = array(
-                'name' => $row['moduleName'],
-                'lectures' => array(),
-            );
-        }
 
-        $modules[$module_id]['lectures'][] = array(
-            'name' => $row['lectureName'],
-            'lectureDescription' => $row['lectureDescription'],
-            'url' => $row['lectureVideoLinks'],
+$num = 0;
+
+while ($row = oci_fetch_assoc($contentRes)) {
+    $module_id = $row['MODULENUMBER'];
+    // $banner = $row['course_image'];
+    if (!isset($modules[$module_id])) {
+        $modules[$module_id] = array(
+            'name' => $row['MODULENAME'],
+            'lectures' => array(),
         );
     }
-} else {
-    $noContent = true;
+
+    // Retrieve the LOB data as a string
+    $lectureDescription = "";
+    $lectureURL = "";
+    if ($row['LECTUREDESCRIPTION'] !== null) {
+        $lob = $row['LECTUREDESCRIPTION'];
+        if ($lob->size() > 0) {
+            $lectureDescription = $lob->read($lob->size());
+        }
+    }
+    if ($row['LECTUREVIDEOLINKS'] !== null) {
+        $lob = $row['LECTUREVIDEOLINKS'];
+        if ($lob->size() > 0) {
+            $lectureURL = $lob->read($lob->size());
+        }
+    }
+
+    $modules[$module_id]['lectures'][] = array(
+        'name' => $row['LECTURENAME'],
+        'lectureDescription' => $lectureDescription,
+        'url' => $lectureURL,
+    );
 }
+
+
+$error = oci_error($contentRes);
+if ($error) {
+    echo "Error: " . $error['message'];
+}
+
+
+// $row = oci_fetch_assoc($contentRes);
+// echo $row;
+
+
+// Select data from the courses table where course_id is 1
+$sql2 = "SELECT * FROM courses WHERE course_id = :course_id";
+$stmt2 = oci_parse($conn, $sql2);
+oci_bind_by_name($stmt2, ":course_id", $course_id);
+oci_execute($stmt2);
+
+// Display the selected data
+
+if (oci_fetch($stmt2)) {
+    // Get column values using oci_result
+    $banner = oci_result($stmt2, "COURSE_IMAGE");
+    $courseName = oci_result($stmt2, "COURSE_NAME");
+    $courseFee = oci_result($stmt2, "COURSE_FEE");
+    $description = oci_result($stmt2, "DESCRIPTION")->load();
+    // And so on for the other columns in the table
+}
+
+
+
+if (count($modules) == 0) {
+
+    $noContent = true;
+    echo "Nothing here!";
+}
+
+// Close the database connection
+oci_close($conn);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -311,6 +358,9 @@ if (mysqli_num_rows($result) > 0) {
                     <h1 class="title">
                         <?php echo $courseName; ?>
                     </h1>
+                    <p class="details">
+                        <?php echo $description; ?>
+                    </p>
                     <p class="details">No Content Available right now!</p>
                 <?php } ?>
 
@@ -321,51 +371,79 @@ if (mysqli_num_rows($result) > 0) {
             <div>
                 <div class="milestones">
                     <?php
-                    $module_index = 0;
-                    $lectureDescription = "";
-                    foreach ($modules as $module) {
+                    if (!$noContent) {
                         ?>
-                        <div class="milestone border-b">
-                            <div class="flex">
-                                <div class="checkbox"><input type="checkbox"
-                                        onclick="markMileStone(this, <?php echo $module_index; ?>)" /></div>
-                                <div class="lecture-name">
-                                    <p>
-                                        <?php echo $module['name']; ?>
-                                    </p>
-                                    <p>
-                                        <span><i class="fas fa-chevron-down"></i></span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="hidden_panel">
-                                <?php foreach ($module['lectures'] as $lecture) { ?>
-                                    <div class="module border-b">
+                        <h1 class="title">
+                            <?php echo $courseName; ?>
+                        </h1>
+                        <p class="details">
+                            <?php echo $description; ?>
+                        </p>
+                    <?php } else {
+                        ?>
+                        <h1 class="title">
+                            <?php echo $courseName; ?>
+                        </h1>
+                        <p class="details">
+                            <?php echo $description; ?>
+                        </p>
+                        <p class="details">No Content Available right now!</p>
+                    <?php } ?>
+                </div>
+                <!-- course details end -->
+
+                <!-- all milestones & modules start -->
+                <div>
+                    <div class="milestones">
+                        <?php
+                        $module_index = 0;
+                        $lectureDescription = "";
+                        foreach ($modules as $module) {
+                            ?>
+
+                            <div class="milestone border-b">
+                                <div class="flex">
+                                    <div class="checkbox"><input type="checkbox"
+                                            onclick="markMileStone(this, <?php echo $module_index; ?>)" /></div>
+                                    <div class="lecture-name">
                                         <p>
-                                            <a description="<?php echo $lecture['lectureDescription']; ?>"
-                                                href="<?php echo $lecture['url']; ?>">
-                                                <?php echo $lecture['name']; ?>
-                                            </a>
+                                            <?php echo $module['name']; ?>
+                                        </p>
+                                        <p>
+                                            <span><i class="fas fa-chevron-down"></i></span>
                                         </p>
                                     </div>
-                                <?php } ?>
+                                </div>
+                                <div class="hidden_panel">
+                                    <?php foreach ($module['lectures'] as $lecture) { ?>
+                                        <div class="module border-b">
+                                            <p>
+                                                <a href="<?php echo $lecture['url']; ?>"
+                                                    description="<?php echo $lecture['lectureDescription']; ?>">
+                                                    <?php echo $lecture['name']; ?>
+                                                </a>
+                                            </p>
+                                        </div>
+                                    <?php } ?>
+                                </div>
                             </div>
-                        </div>
-                        <?php
-                        $module_index++;
-                    }
-                    ?>
+                            <?php
+                            $module_index++;
+                        }
+                        ?>
 
+
+
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <b>Completed Modules</b>
+                    <div class="doneList">
+                        <!-- done list will load here -->
+                    </div>
                 </div>
-                <br>
-                <br>
-                <br>
-                <b>Completed Modules</b>
-                <div class="doneList">
-                    <!-- done list will load here -->
-                </div>
-            </div>
-            <!-- all milestones and modules end -->
+                <!-- all milestones and modules end -->
         </section>
     </div>
     <!-- <script src="js/data.js"></script>
@@ -380,6 +458,7 @@ if (mysqli_num_rows($result) > 0) {
             const hiddenPanelDiv = milestoneDiv.querySelector(".hidden_panel");
 
             milestoneTitleDiv.addEventListener("click", () => {
+                console.log("chole");
                 hiddenPanelDiv.classList.toggle("hidden_panel");
                 milestoneTitleDiv.querySelector("span").classList.toggle("rotate");
             });

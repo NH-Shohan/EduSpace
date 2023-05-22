@@ -5,19 +5,19 @@ include('../../Controller/db_connect.php');
 $courseId = $_GET['enroll'];
 if (isset($_SESSION['email'])) {
     $userEmail = $_SESSION['email'];
-    $checkSql = "SELECT * FROM `enrolled_courses` WHERE `user_email` = '$userEmail' AND `course_id` = '$courseId'";
-    $checkResult = mysqli_query($conn, $checkSql);
+    $checkSql = "SELECT * FROM enrolled_courses WHERE user_email = '$userEmail' AND course_id = '$courseId'";
+    $checkResult = oci_parse($conn, $checkSql);
+    oci_execute($checkResult);
 
-
-
-    if (mysqli_num_rows($checkResult) > 0) {
+    if (oci_fetch($checkResult)) {
         // User is already enrolled in the course
         $_SESSION['enrollErr'] = "You are already enrolled in this course.";
         header("Location: showCourse.php?course_id=$courseId");
     } else {
         // User is not enrolled in the course, proceed with enrollment
-        $enrollSql = "INSERT INTO `enrolled_courses` (`user_email`, `course_id`) VALUES ('$userEmail', '$courseId')";
-        $enrollResult = mysqli_query($conn, $enrollSql);
+        $enrollSql = "INSERT INTO enrolled_courses (user_email, course_id) VALUES ('$userEmail', '$courseId')";
+        $enrollResult = oci_parse($conn, $enrollSql);
+        oci_execute($enrollResult);
 
         if ($enrollResult) {
             // Enrollment successful
@@ -33,3 +33,4 @@ if (isset($_SESSION['email'])) {
     echo "Login";
     header("Location: showCourseDetails.php?course_id=$courseId");
 }
+?>

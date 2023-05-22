@@ -57,9 +57,7 @@ function renderCards() {
             </p>
         </div>
 
-        <div class="card_footer">
-            <button><i class="fa-solid fa-play"></i>Play</button>
-        </div>
+        <iframe width="30" height="20" src="https://www.youtube.com/embed/Be0ehA8s8Q4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
     </div>
 </div>
 `;
@@ -76,5 +74,5 @@ function renderCards() {
   xhttp.send();
 }
 
-// setInterval(renderCards, 1000);
-renderCards();
+setInterval(renderCards, 1000);
+// renderCards();

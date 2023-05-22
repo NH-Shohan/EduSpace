@@ -16,54 +16,54 @@ require_once './../../Controller/db_connect.php';
     <script src="https://kit.fontawesome.com/9a6693ad48.js" crossorigin="anonymous"></script>
 
     <style>
-    .card_wrapper {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        margin-block: 20px;
-        margin-top: 90px;
-        width: 100%;
-        justify-items: center;
-    }
+        .card_wrapper {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            margin-block: 20px;
+            margin-top: 90px;
+            width: 100%;
+            justify-items: center;
+        }
 
-    .card_container {
-        margin: 10px;
-        box-shadow: 1px 1px 5px var(--secondaryText2);
-        width: 270px;
-        padding: 20px;
-        border-radius: 7px;
-    }
+        .card_container {
+            margin: 10px;
+            box-shadow: 1px 1px 5px var(--secondaryText2);
+            width: 350px;
+            padding: 20px;
+            border-radius: 7px;
+        }
 
-    .card_image img {
-        width: 120px;
-        border-radius: 5px;
-    }
+        .card_image img {
+            width: 120px;
+            border-radius: 5px;
+        }
 
-    .card_body {
-        font-size: 15px;
-    }
+        .card_body {
+            font-size: 15px;
+        }
 
-    .card_body i {
-        color: #ffdd00;
-    }
+        .card_body i {
+            color: #ffdd00;
+        }
 
-    .card_footer button {
-        background-color: var(--tertiary);
-        border: none;
-        border-radius: 5px;
-        margin-top: 10px;
-        padding: 3px 20px;
-        color: var(--primary);
-        cursor: pointer;
-        transition: all 200ms;
-    }
+        .card_footer button {
+            background-color: var(--tertiary);
+            border: none;
+            border-radius: 5px;
+            margin-top: 10px;
+            padding: 3px 20px;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 200ms;
+        }
 
-    .card_footer button:hover {
-        background-color: var(--text);
-    }
+        .card_footer button:hover {
+            background-color: var(--text);
+        }
 
-    .card_footer i {
-        margin-right: 7px;
-    }
+        .card_footer i {
+            margin-right: 7px;
+        }
     </style>
 </head>
 

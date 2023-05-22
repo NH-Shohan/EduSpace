@@ -72,30 +72,31 @@ if ($_SESSION["authEvent"] == "login") {
     if (
         isset($_SESSION['email']) && isset($_SESSION['password'])
     ) {
-        // Get user input from $_POST superglobal array
+        // Get user input from $_SESSION superglobal array
         $email = $_SESSION['email'];
         $password = $_SESSION['password'];
 
         // Prepare a SQL statement to select user data from the database
-        $sql = "SELECT * FROM users WHERE email = '$email'";
-        // Execute the SQL statement and store the result in a variable
-        $result = mysqli_query($conn, $sql);
-        // echo $result;
+        $sql = "SELECT * FROM users WHERE email = :email";
+        $stmt = oci_parse($conn, $sql);
+        oci_bind_by_name($stmt, ":email", $email);
+        oci_execute($stmt);
+
+        // Fetch the user data as an associative array
+        $user = oci_fetch_assoc($stmt);
 
         // Check if the result contains any rows
-        if (mysqli_num_rows($result) > 0) {
-            // Fetch the user data as an associative array
-            $user = mysqli_fetch_assoc($result);
-
+        if ($user) {
             // Verify the password using password_verify() function
-            if (password_verify($password, $user['password'])) {
+            if (password_verify($password, $user['PASSWORD'])) {
                 // Password is correct, start a session and store user data in $_SESSION superglobal array
                 // session_start();
-                $_SESSION['name'] = $user['name'];
-                $_SESSION['email'] = $user['email'];
-                $_SESSION['username'] = $user['username'];
-                $_SESSION['role'] = $user['role'];
+                $_SESSION['name'] = $user['NAME'];
+                $_SESSION['email'] = $user['EMAIL'];
+                $_SESSION['username'] = $user['USERNAME'];
+                $_SESSION['role'] = $user['ROLE'];
 
+                // echo $user['ROLE'];
                 // Redirect to a welcome page
 
                 if ($user) {
@@ -112,11 +113,12 @@ if ($_SESSION["authEvent"] == "login") {
                 echo "Wrong password.";
             }
         } else {
-            // No user found with that username, display an error message
+            // No user found with that email, display an error message
             header("Location: ./../View/Pages/login.php?error=No user found with that email.");
             echo "No user found with that email.";
         }
     }
+
 }
 
 // Check if the user submitted the registration form
@@ -124,16 +126,18 @@ if (
     isset($_SESSION['name']) && isset($_SESSION['email']) && isset($_SESSION['username']) && isset($_SESSION['password']) &&
     $_SESSION["authEvent"] == "registration"
 ) {
-    // Get user input from $_POST superglobal array
+    // Get user input from $_SESSION superglobal array
     $name = $_SESSION['name'];
     $email = $_SESSION['email'];
     $username = $_SESSION['username'];
     $password = $_SESSION['password'];
     $role = 'student';
     $form_data = $_SESSION;
-    //Extraction of domain
+
+    // Extraction of domain
     $emailParts = explode('@', $email);
     $mailDomain = end($emailParts);
+
     // Validate user input using empty() function and filter_var() function for email validation 
     if (empty($name)) {
         $nameError = "Name is required.";
@@ -159,30 +163,42 @@ if (
             $role = 'student';
         }
         // Prepare a SQL statement to insert user data into the database 
-        $sql = "INSERT INTO users (name, email, username, password, role) VALUES ('$name', '$email', '$username', '$hashed_password', '$role');";
+        $sql = "INSERT INTO users (name, email, username, password, role) VALUES (:name, :email, :username, :hashed_password, :role)";
+        $stmt = oci_parse($conn, $sql);
+        oci_bind_by_name($stmt, ":name", $name);
+        oci_bind_by_name($stmt, ":email", $email);
+        oci_bind_by_name($stmt, ":username", $username);
+        oci_bind_by_name($stmt, ":hashed_password", $hashed_password);
+        oci_bind_by_name($stmt, ":role", $role);
+        oci_execute($stmt);
 
-        // Execute the SQL statement and check if it was successful 
-        if (mysqli_query($conn, $sql)) {
+        // Check if the insert was successful
+        $rowsAffected = oci_num_rows($stmt);
+        if ($rowsAffected > 0) {
             // User data inserted successfully, display a success message 
 
             $_SESSION["authEvent"] = "";
             // echo "User registered successfully.";
-            $sqlLogin = "SELECT * FROM users WHERE email = '$email'";
-            $result = mysqli_query($conn, $sqlLogin);
-            if (mysqli_num_rows($result) > 0) {
-                $user = mysqli_fetch_assoc($result);
+
+            $sqlLogin = "SELECT * FROM users WHERE email = :email";
+            $stmtLogin = oci_parse($conn, $sqlLogin);
+            oci_bind_by_name($stmtLogin, ":email", $email);
+            oci_execute($stmtLogin);
+
+            // Fetch the user data as an associative array
+            $user = oci_fetch_assoc($stmtLogin);
+            if ($user) {
                 setDataCookie($user);
-                $_SESSION['role'] = $user['role'];
+                $_SESSION['role'] = $user['ROLE'];
             }
 
             header("Location: ./../View/Pages/profile.php");
         } else {
             // User data insertion failed, display an error message 
-            echo "Error: " . mysqli_error($conn);
+            echo "Error inserting user data.";
         }
     }
+
 }
 
-// Close the connection
-mysqli_close($conn);
 ?>

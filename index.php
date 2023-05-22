@@ -17,6 +17,7 @@ require_once 'Controller/db_connect.php';
 <script src="View/Shared/navbarScript.js"></script>
 
 <body>
+
     <?php include "View/Shared/Navbar.php" ?>
     <?php include "View/Home/Heading.php" ?>
     <?php include "View/Home/OurServices.php" ?>

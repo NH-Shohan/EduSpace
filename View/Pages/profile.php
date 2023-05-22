@@ -106,13 +106,13 @@ if (empty($_COOKIE['loggedUser'])) {
                 <form>
                     <h1 style="color:var(--text)">Profile Information</h1>
                     <label for="name">Name</label>
-                    <input value="<?php echo $userData['name'] ?>" type="text" name="name" />
+                    <input value="<?php echo $userData['NAME'] ?>" type="text" name="name" />
 
                     <label for="username">User Name</label>
-                    <input value="<?php echo $userData['username'] ?>" type="text" name="username" />
+                    <input value="<?php echo $userData['USERNAME'] ?>" type="text" name="username" />
 
                     <label for="email">Email</label>
-                    <input value="<?php echo $userData['email'] ?>" type="email" name="email" />
+                    <input value="<?php echo $userData['EMAIL'] ?>" type="email" name="email" />
 
                     <label for="password">Current Password</label>
                     <input type="password" name="password" />
