@@ -385,8 +385,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                     <button class="add_to_cart_btn" type="button">Add to cart</button>
-                    <a href="showCourse.php?course_id=<?php echo $course_id ?>"> <button class="buy_course_btn"
-                            type="button"><a href="enroll.php?enroll=<?php echo $course_id ?>">Buy Now</a>
+                    <a href="enroll.php?enroll=<?php echo $course_id ?>"> <button class="buy_course_btn"
+                            type="button">Buy Now
+                        </button>
                     </a>
                     <p>
                         <?php

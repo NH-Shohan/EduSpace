@@ -491,15 +491,14 @@ require_once './../../Controller/db_connect.php';
                 <div class="course-cards">
                     <?php
                     // select all records from the courses table
-                    // select all records from the courses table
                     $sql = "SELECT * FROM courses";
                     $stmt = oci_parse($conn, $sql);
                     oci_execute($stmt);
-                    // echo oci_execute($stmt);
+
                     // check if any records are found
-                    if (oci_fetch_assoc($stmt)) {
+                    if ($row = oci_fetch_assoc($stmt)) {
                         // iterate through each row
-                        while ($row = oci_fetch_assoc($stmt)) {
+                        do {
                             ?>
                             <div class="course-card">
                                 <img src="<?php echo $row['COURSE_IMAGE']; ?>" alt="<?php echo $row['COURSE_NAME']; ?>">
@@ -516,20 +515,19 @@ require_once './../../Controller/db_connect.php';
                                     <p>Rating:
                                         <?php echo $row['RATING']; ?>⭐
                                     </p>
-                                    <a href="showCourseDetails.php?course_id=<?php echo $row['COURSE_ID']; ?>">Let's
-                                        Explore</a>
+                                    <a href="showCourseDetails.php?course_id=<?php echo $row['COURSE_ID']; ?>">Let's Explore</a>
                                 </div>
                             </div>
                             <?php
-                        }
+                        } while ($row = oci_fetch_assoc($stmt));
                     } else {
                         echo "No records found";
-                        // echo oci_error();
                     }
 
                     // close the database connection
                     oci_close($conn);
                     ?>
+
                 </div>
             </div>
         </section>

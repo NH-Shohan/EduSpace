@@ -21,12 +21,51 @@ require_once './../../Controller/db_connect.php';
         }
 
         .dashboard_content_section {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            /* display: flex; */
+            /* justify-content: center;
+            align-items: center; */
             padding: 20px;
         }
     </style>
+    <style>
+        .customers {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .customers th,
+        .customers td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .customers th {
+            background-color: #f2f2f2;
+        }
+
+        .customers tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .customers button {
+            padding: 6px 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .customers button a {
+            text-decoration: none;
+            color: white;
+        }
+
+        .customers button:hover {
+            background-color: #45a049;
+        }
+    </style>
+
 </head>
 
 <body>
@@ -61,13 +100,22 @@ require_once './../../Controller/db_connect.php';
                         echo '<tr>
                 <td>' . $row["COURSE_NAME"] . '</td>
                 <td>' . $row["INSTRUCTOR_EMAIL"] . '</td>
-                <td>' . $row["DESCRIPTION"] . '</td>
+                <td>';
+                        // Read the LOB data for Description
+                        $lob = $row["DESCRIPTION"];
+                        if (!is_null($lob)) {
+                            $size = oci_field_size($stmt, 'DESCRIPTION');
+                            $description = oci_lob_read($lob, $size);
+                            echo $description;
+                        }
+                        echo '</td>
                 <td><button><a href="showCourse.php?course_id=' . $row["COURSE_ID"] . '">Show</a></button></td>
             </tr>';
                     }
                     ?>
                 </table>
             <?php } ?>
+
 
 
 
@@ -112,6 +160,10 @@ require_once './../../Controller/db_connect.php';
 
                     </div>
                     <!-- 2nd table -->
+                    <br>
+                    <br>
+                    <br>
+
                     <div>
                         <table class="customers">
                             <tr>
@@ -134,6 +186,7 @@ require_once './../../Controller/db_connect.php';
                         <td>' . $row["RATING"] . '</td>
                         <td>' . $row["COURSE_NAME"] . '</td>
                         <td>' . $row["COURSE_CATEGORY"] . '</td>
+                        <td><button><a href="showCourse.php?course_id=' . $row["COURSE_ID"] . '">Show</a></button></td>
                     </tr>';
                             }
                             ?>
@@ -144,8 +197,6 @@ require_once './../../Controller/db_connect.php';
 
 
             <!--  -->
-
-
             <!-- student -->
             <table class="customers">
                 <?php
@@ -172,7 +223,7 @@ require_once './../../Controller/db_connect.php';
                         echo '<tr>
                 <td>' . $row["COURSE_NAME"] . '</td>
                 <td>' . $row["INSTRUCTOR_NAME"] . '</td>
-                <td>' . $row["DATE"] . '</td>
+                <td>' . $row["ENROLL_DATE"] . '</td>
                 <td><button><a href="showCourseDetails.php?course_id=' . $row["COURSE_ID"] . '">Show</a></button></td>
             </tr>';
                     }
