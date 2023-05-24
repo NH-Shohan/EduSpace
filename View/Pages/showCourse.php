@@ -5,7 +5,6 @@ require_once './../../Controller/db_connect.php';
 
 $course_id = $_GET['course_id'];
 
-
 $modules = array();
 $banner = "";
 $courseName = "";
@@ -16,15 +15,10 @@ $noContent = false;
 $sql = "SELECT * FROM course_content WHERE course_id = :course_id ORDER BY moduleNumber, lectureNumber";
 $contentRes = oci_parse($conn, $sql);
 oci_bind_by_name($contentRes, ":course_id", $course_id);
-
 oci_execute($contentRes);
-
-
-$num = 0;
 
 while ($row = oci_fetch_assoc($contentRes)) {
     $module_id = $row['MODULENUMBER'];
-    // $banner = $row['course_image'];
     if (!isset($modules[$module_id])) {
         $modules[$module_id] = array(
             'name' => $row['MODULENAME'],
@@ -32,7 +26,6 @@ while ($row = oci_fetch_assoc($contentRes)) {
         );
     }
 
-    // Retrieve the LOB data as a string
     $lectureDescription = "";
     $lectureURL = "";
     if ($row['LECTUREDESCRIPTION'] !== null) {
@@ -55,45 +48,31 @@ while ($row = oci_fetch_assoc($contentRes)) {
     );
 }
 
-
 $error = oci_error($contentRes);
 if ($error) {
     echo "Error: " . $error['message'];
 }
 
-
-// $row = oci_fetch_assoc($contentRes);
-// echo $row;
-
-
-// Select data from the courses table where course_id is 1
 $sql2 = "SELECT * FROM courses WHERE course_id = :course_id";
 $stmt2 = oci_parse($conn, $sql2);
 oci_bind_by_name($stmt2, ":course_id", $course_id);
 oci_execute($stmt2);
 
-// Display the selected data
-
 if (oci_fetch($stmt2)) {
-    // Get column values using oci_result
     $banner = oci_result($stmt2, "COURSE_IMAGE");
     $courseName = oci_result($stmt2, "COURSE_NAME");
     $courseFee = oci_result($stmt2, "COURSE_FEE");
     $description = oci_result($stmt2, "DESCRIPTION")->load();
-    // And so on for the other columns in the table
 }
 
-
-
 if (count($modules) == 0) {
-
     $noContent = true;
     echo "Nothing here!";
 }
 
-// Close the database connection
 oci_close($conn);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

@@ -104,20 +104,35 @@ require_once './../../Controller/db_connect.php';
 
 
     <body>
-
         <?php include "./../../View/Shared/Navbar.php" ?>
         <div class="dashboard_container">
             <div class="drawer_section">
                 <?php include "./../../View/Shared/dashboardDrawer.php" ?>
             </div>
 
-
             <div class="dashboard_content_section">
                 <div>
                     <h1>Add Course Content</h1>
                     <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                        <label for="course_id">Course ID:</label>
-                        <input type="text" name="course_id" required><br>
+                        <?php
+                        // Check if user is logged in and session email is set
+                        if (isset($_SESSION['email'])) {
+                            // Prepare and execute SQL query to get course names where instructor_email matches session email
+                            $query = "SELECT course_name, course_id FROM courses WHERE instructor_email = :instructor_email";
+                            $stmt = oci_parse($conn, $query);
+                            oci_bind_by_name($stmt, ':instructor_email', $_SESSION['email']);
+                            oci_execute($stmt);
+
+                            // Create dropdown of course names
+                            echo '<label for="course_name">Course Name:</label>';
+                            echo '<select name="course_id" required>';
+                            while ($row = oci_fetch_assoc($stmt)) {
+                                echo '<option value="' . $row['COURSE_ID'] . '">' . $row['COURSE_NAME'] . '</option>';
+                            }
+                            echo '</select>';
+                        }
+                        ?>
+                        <br>
 
                         <label for="total_modules">Total Modules:</label>
                         <input type="number" name="total_modules" required><br>
@@ -147,13 +162,13 @@ require_once './../../Controller/db_connect.php';
                     </form>
 
                     <?php
-                    // check if form is submitted
+                    // Check if form is submitted
                     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                        // validate input
+                        // Validate input
                         $errors = [];
 
                         if (!isset($_POST['course_id']) || empty($_POST['course_id'])) {
-                            $errors[] = 'Course ID is required.';
+                            $errors[] = 'Course Name is required.';
                         }
 
                         if (!isset($_POST['total_modules']) || empty($_POST['total_modules'])) {
@@ -188,7 +203,7 @@ require_once './../../Controller/db_connect.php';
                             $errors[] = 'Lecture Number is required.';
                         }
 
-                        // display errors if any
+                        // Display errors if any
                         if (!empty($errors)) {
                             echo '<ul>';
                             foreach ($errors as $error) {
@@ -196,14 +211,35 @@ require_once './../../Controller/db_connect.php';
                             }
                             echo '</ul>';
                         } else {
-                            // insert data into
-                    
-                            // prepare and bind the SQL statement
-                            $stmt = $conn->prepare("INSERT INTO course_content (course_id, totalModule, moduleNumber, moduleName, lectureVideoLinks, totalLecture, lectureName, lectureDescription, lectureNumber) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                            $stmt->bind_param("iiissssis", $course_id, $total_modules, $module_number, $module_name, $lecture_video_links, $total_lectures, $lecture_name, $lecture_description, $lecture_number);
 
-                            // set parameters and execute statement
-                            $course_id = $_POST['course_id'];
+                            // echo $_POST['course_id'];
+                            // Insert data into course_content table
+                            $query = "INSERT INTO course_content (course_id, totalModule, moduleNumber, moduleName, lectureVideoLinks, totalLecture, lectureName, lectureDescription, lectureNumber) VALUES (:course_id, :total_modules, :module_number, :module_name, :lecture_video_links, :total_lectures, :lecture_name, :lecture_description, :lecture_number)";
+                            $stmt = oci_parse($conn, $query);
+                            oci_bind_by_name($stmt, ':course_id', $course_id);
+                            oci_bind_by_name($stmt, ':total_modules', $total_modules);
+                            oci_bind_by_name($stmt, ':module_number', $module_number);
+                            oci_bind_by_name($stmt, ':module_name', $module_name);
+                            oci_bind_by_name($stmt, ':lecture_video_links', $lecture_video_links);
+                            oci_bind_by_name($stmt, ':total_lectures', $total_lectures);
+                            oci_bind_by_name($stmt, ':lecture_name', $lecture_name);
+                            oci_bind_by_name($stmt, ':lecture_description', $lecture_description);
+                            oci_bind_by_name($stmt, ':lecture_number', $lecture_number);
+
+                            // Add the lengths of the variables for correct binding
+                            oci_bind_by_name($stmt, ':course_id', $course_id, 255);
+                            oci_bind_by_name($stmt, ':total_modules', $total_modules, 255);
+                            oci_bind_by_name($stmt, ':module_number', $module_number, 255);
+                            oci_bind_by_name($stmt, ':module_name', $module_name, 100);
+                            oci_bind_by_name($stmt, ':lecture_video_links', $lecture_video_links, 255);
+                            oci_bind_by_name($stmt, ':total_lectures', $total_lectures, 255);
+                            oci_bind_by_name($stmt, ':lecture_name', $lecture_name, 255);
+                            oci_bind_by_name($stmt, ':lecture_description', $lecture_description, 255);
+                            oci_bind_by_name($stmt, ':lecture_number', $lecture_number, 255);
+
+
+                            // Set parameters and execute statement
+                            $course_id = $_POST['course_id']; // Use the selected course name as the course_id
                             $total_modules = $_POST['total_modules'];
                             $module_number = $_POST['module_number'];
                             $module_name = $_POST['module_name'];
@@ -213,21 +249,23 @@ require_once './../../Controller/db_connect.php';
                             $lecture_description = $_POST['lecture_description'];
                             $lecture_number = $_POST['lecture_number'];
 
-                            if ($stmt->execute()) {
+                            if (oci_execute($stmt)) {
                                 echo "New course content added successfully.";
                             } else {
-                                echo "Error: " . $stmt->error;
+                                echo "Error: Failed to add course content.";
                             }
 
-                            // close database connection and statement
-                            // $stmt->close();
-                            // $conn->close();
+                            oci_free_statement($stmt);
                         }
                     }
+
+                    // Close the database connection
+                    oci_close($conn);
                     ?>
                 </div>
             </div>
         </div>
     </body>
+
 
     </html>

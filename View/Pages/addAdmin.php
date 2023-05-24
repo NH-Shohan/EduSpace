@@ -103,6 +103,33 @@ require_once './../../Controller/db_connect.php';
             /* margin: 5px 0; */
         }
     </style>
+
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
     <title>Document</title>
 </head>
 
@@ -115,6 +142,8 @@ require_once './../../Controller/db_connect.php';
 
         <div class="dashboard_content_section">
             <?php
+            $success_message = '';
+            $error_message = '';
             // Connect to the database
             
             // Check if the form has been submitted
@@ -122,26 +151,26 @@ require_once './../../Controller/db_connect.php';
                 try {
                     if (isset($_POST['email'])) {
                         $email = $_POST['email'];
-                        // other code that uses the $email variable
-            
-                        // Update the role of the user to 'admin'
-                        $query = "UPDATE users SET role = 'admin' WHERE email = ?";
-                        $stmt = mysqli_prepare($conn, $query);
-                        mysqli_stmt_bind_param($stmt, 's', $email);
-                        mysqli_stmt_execute($stmt);
+
+                        // Prepare the statement to call the stored procedure
+                        $query = "BEGIN UPDATE_USER_ROLE(:email); END;";
+                        $stmt = oci_parse($conn, $query);
+
+                        // Bind the input parameter
+                        oci_bind_by_name($stmt, ":email", $email);
+
+                        // Execute the statement
+                        oci_execute($stmt);
 
                         // Check if the update was successful
-                        if (mysqli_stmt_affected_rows($stmt) > 0) {
-                            echo "User role updated to admin";
+                        if (oci_num_rows($stmt) > 0) {
+                            $success_message = 'User role updated to admin';
                         } else {
-                            echo 'Failed to update user role';
+                            $error_message = 'Failed to add admin.';
                         }
                     }
-
-
-
-                } catch (mysqli_sql_exception $e) {
-                    if ($e->getCode() == 1062) { // check for duplicate key error code
+                } catch (Exception $e) {
+                    if ($e->getCode() == 1) { // check for duplicate key error code
                         echo "Course already exists as recommended course";
                     } else {
                         echo "An error occurred: " . $e->getMessage();
@@ -151,37 +180,87 @@ require_once './../../Controller/db_connect.php';
 
             ?>
 
-            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+            <div>
+                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
 
-                <h1 style="color: var(--text)" for="email">Select an Email:</h1>
+                    <h1 style="color: var(--text)" for="email">Select an Email:</h1>
 
-                <br />
-                <select class="recommended_course_selection" name="email" id="email">
-                    <?php
-                    $query = "SELECT email, name FROM users";
-                    $result = mysqli_query($conn, $query);
-
-                    // Loop through the results and create an option for each user
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        ?>
-                        <option value="<?php echo $row['email'] ?>">
-                            <?php echo $row['name'] ?>: email: <?php echo $row['email'] ?>
-                        </option>
+                    <br />
+                    <select class="recommended_course_selection" name="email" id="email">
                         <?php
-                    }
+                        $query = "SELECT email, name FROM users";
+                        $stmt = oci_parse($conn, $query);
+                        oci_execute($stmt);
 
-                    // Close the database connection
-                    mysqli_close($conn);
-                    ?>
-                </select>
-                <br />
-                <button class="recommended_course_button" type="submit">Add Admin</button>
-            </form>
+                        // Loop through the results and create an option for each user
+                        while ($row = oci_fetch_assoc($stmt)) {
+                            ?>
+                            <option value="<?php echo $row['EMAIL']; ?>">
+                                <?php echo $row['NAME']; ?>: email: <?php echo $row['EMAIL']; ?>
+                            </option>
+                            <?php
+                        }
+
+                        // Close the database connection
+                        oci_close($conn);
+                        ?>
+                    </select>
+                    <br />
+                    <?php if (!empty($success_message)): ?>
+                        <div class="success_message success">
+                            <?php echo $success_message; ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (!empty($error_message)): ?>
+                        <div class="error_message error">
+                            <?php echo $error_message; ?>
+                        </div>
+                    <?php endif; ?>
+                    <br>
+                    <button class="recommended_course_button" type="submit">Add Admin</button>
+                </form>
+                <br><br>
+                <div>
+                    <h2>Admin Users</h2>
+                    <table>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                        </tr>
+                        <?php
+                        $query = "SELECT name, email, role FROM users WHERE role = 'admin'";
+                        $stmt = oci_parse($conn, $query);
+                        oci_execute($stmt);
+
+                        // Loop through the results and create a table row for each admin user
+                        while ($row = oci_fetch_assoc($stmt)) {
+                            ?>
+                            <tr>
+                                <td>
+                                    <?php echo $row['NAME']; ?>
+                                </td>
+                                <td>
+                                    <?php echo $row['EMAIL']; ?>
+                                </td>
+                                <td>
+                                    <?php echo $row['ROLE']; ?>
+                                </td>
+                            </tr>
+                            <?php
+                        }
+                        ?>
+                    </table>
+                </div>
+            </div>
         </div>
+
     </div>
     <!-- for Navbar Responsive -->
     <script src="./../../View/Shared/navbarScript.js"></script>
 
 </body>
+
 
 </html>

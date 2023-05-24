@@ -131,15 +131,15 @@ require_once './../../Controller/db_connect.php';
             <?php include "./../../View/Shared/dashboardDrawer.php" ?>
         </div>
 
-
         <div class="dashboard_content_section">
-
             <?php
+            $success_message = '';
+            $error_message = '';
+
             // Define variables and initialize with empty values
             $course_name = $course_category = $instructor_name = $instructor_email = $rating = $description = $course_modules = $course_fee = "";
             $course_image = "default.jpg";
             $name_error = $category_error = $instructor_error = $email_error = $rating_error = $description_error = $modules_error = $fee_error = "";
-
 
             // Check if the form has been submitted
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -219,20 +219,36 @@ require_once './../../Controller/db_connect.php';
                     $course_fee = $_POST['course_fee'];
 
                     // Prepare and execute the SQL query to insert the new course into the courses table
-                    $query = "INSERT INTO courses (course_name, course_image, course_category, instructor_name, instructor_email, rating, description, course_modules, course_fee) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                    $stmt = mysqli_prepare($conn, $query);
-                    mysqli_stmt_bind_param($stmt, 'sssssdsss', $course_name, $course_image, $course_category, $instructor_name, $instructor_email, $rating, $description, $course_modules, $course_fee);
-                    mysqli_stmt_execute($stmt);
-
+                    $query = "INSERT INTO courses (course_name, course_image, course_category, instructor_name, instructor_email, rating, description, course_modules, course_fee) VALUES (:course_name, :course_image, :course_category, :instructor_name, :instructor_email, :rating, :description, :course_modules, :course_fee)";
+                    $stmt = oci_parse($conn, $query);
+                    oci_bind_by_name($stmt, ':course_name', $course_name);
+                    oci_bind_by_name($stmt, ':course_image', $course_image);
+                    oci_bind_by_name($stmt, ':course_category', $course_category);
+                    oci_bind_by_name($stmt, ':instructor_name', $instructor_name);
+                    oci_bind_by_name($stmt, ':instructor_email', $instructor_email);
+                    oci_bind_by_name($stmt, ':rating', $rating);
+                    oci_bind_by_name($stmt, ':description', $description);
+                    oci_bind_by_name($stmt, ':course_modules', $course_modules);
+                    oci_bind_by_name($stmt, ':course_fee', $course_fee);
+                    // oci_execute($stmt);
+            
+                    if (oci_execute($stmt)) {
+                        // Course added successfully
+                        $success_message = 'Course added successfully.';
+                    } else {
+                        // Failed to add course
+                        $error_message = 'Failed to add course.';
+                    }
                     // Close the database connection
-                    mysqli_stmt_close($stmt);
-                    mysqli_close($conn);
+                    oci_free_statement($stmt);
+                    oci_close($conn);
 
                     // Redirect to the courses page
-                    header('Location: courses.php');
+                    // header("Location: index.php");
                 }
             }
             ?>
+
             <form method="post">
                 <div class="heading">
                     <h1>ADD COURSES</h1>
@@ -279,6 +295,17 @@ require_once './../../Controller/db_connect.php';
 
                         <button type="submit">Add course</button>
                     </div>
+                    <?php if (!empty($success_message)): ?>
+                        <div class="success_message success">
+                            <?php echo $success_message; ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (!empty($error_message)): ?>
+                        <div class="error_message error">
+                            <?php echo $error_message; ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </form>
         </div>
@@ -287,5 +314,6 @@ require_once './../../Controller/db_connect.php';
     <script src="./../../View/Shared/navbarScript.js"></script>
 
 </body>
+
 
 </html>

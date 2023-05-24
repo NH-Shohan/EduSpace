@@ -97,12 +97,31 @@
 
                     <?php }
                 } ?>
+                <!--  -->
+                <?php
+                if (isset($_SESSION['role'])) {
+                    if ($_SESSION['role'] == 'teacher') { ?>
+                        <a class="<?= $page === 'updateCourse.php' ? 'drawer_active' : 'drawer_nav_link'; ?>"
+                            href="./../../../Project/View/Pages/updateCourse.php">Update Course</a>
+
+                    <?php }
+                } ?>
 
                 <!--  -->
                 <?php
                 if (isset($_SESSION['role'])) {
                     if ($_SESSION['role'] == 'teacher') { ?>
-                        <a class="<?= $page === 'addCourses.php' ? 'drawer_active' : 'drawer_nav_link'; ?>"
+                        <a class="<?= $page === 'deleteCourse.php' ? 'drawer_active' : 'drawer_nav_link'; ?>"
+                            href="./../../../Project/View/Pages/deleteCourse.php">Delete Course</a>
+
+                    <?php }
+                } ?>
+
+                <!--  -->
+                <?php
+                if (isset($_SESSION['role'])) {
+                    if ($_SESSION['role'] == 'teacher') { ?>
+                        <a class="<?= $page === 'addPodcasts.php' ? 'drawer_active' : 'drawer_nav_link'; ?>"
                             href="./../../../Project/View/Pages/addPodcasts.php">Add Podcast</a>
 
                     <?php }

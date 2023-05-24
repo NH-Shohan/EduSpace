@@ -1,4 +1,5 @@
 <?php
+ob_start(); // Add this line to buffer the output
 // session_start();
 // require_once 'Controller/UserController.php';
 ?>

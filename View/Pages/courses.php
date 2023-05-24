@@ -444,15 +444,7 @@ require_once './../../Controller/db_connect.php';
 
     <!-- Main page -->
     <div class="courses">
-        <!-- Search bar -->
-        <div class="search-container">
-            <div class="container">
-                <form action="#" method="get">
-                    <input type="text" placeholder="Search for courses...">
-                    <button type="submit">Search</button>
-                </form>
-            </div>
-        </div>
+
 
         <!-- Category -->
         <div class="category-bar">
@@ -483,6 +475,30 @@ require_once './../../Controller/db_connect.php';
 
         <!-- Recommended -->
 
+        <!-- Search bar -->
+        <div class="search-container">
+            <?php
+            // Get the search query from the URL parameters
+            $searchQuery = isset($_GET['q']) ? $_GET['q'] : '';
+
+            // Convert the search query to uppercase
+            $searchQuery = strtoupper($searchQuery);
+
+            // Build the SQL query with the search condition
+            $sql = "SELECT * FROM courses WHERE UPPER(course_name) LIKE '%$searchQuery%' OR UPPER(course_category) LIKE '%$searchQuery%'";
+
+            // Execute the SQL query and fetch the results
+            $stmt = oci_parse($conn, $sql);
+            oci_execute($stmt);
+            ?>
+            <div class="container">
+                <form method="get">
+                    <input type="text" name="q" placeholder="Search for courses..."
+                        value="<?php echo htmlspecialchars($searchQuery); ?>">
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+        </div>
 
         <!-- Courses -->
         <section class="all-courses" id="all-course">
@@ -490,12 +506,9 @@ require_once './../../Controller/db_connect.php';
                 <h2>All Courses</h2>
                 <div class="course-cards">
                     <?php
-                    // select all records from the courses table
-                    $sql = "SELECT * FROM courses";
-                    $stmt = oci_parse($conn, $sql);
-                    oci_execute($stmt);
 
-                    // check if any records are found
+
+                    // Display the search results
                     if ($row = oci_fetch_assoc($stmt)) {
                         // iterate through each row
                         do {
@@ -527,10 +540,11 @@ require_once './../../Controller/db_connect.php';
                     // close the database connection
                     oci_close($conn);
                     ?>
-
                 </div>
             </div>
         </section>
+
+
 
     </div>
     <!-- Finish -->
