@@ -218,9 +218,11 @@ require_once './../../Controller/db_connect.php';
                     $course_modules = $_POST['course_modules'];
                     $course_fee = $_POST['course_fee'];
 
-                    // Prepare and execute the SQL query to insert the new course into the courses table
-                    $query = "INSERT INTO courses (course_name, course_image, course_category, instructor_name, instructor_email, rating, description, course_modules, course_fee) VALUES (:course_name, :course_image, :course_category, :instructor_name, :instructor_email, :rating, :description, :course_modules, :course_fee)";
+                    // Prepare the statement to call the stored procedure
+                    $query = "BEGIN INSERT_COURSE(:course_name, :course_image, :course_category, :instructor_name, :instructor_email, :rating, :description, :course_modules, :course_fee); END;";
                     $stmt = oci_parse($conn, $query);
+
+                    // Bind the input parameters
                     oci_bind_by_name($stmt, ':course_name', $course_name);
                     oci_bind_by_name($stmt, ':course_image', $course_image);
                     oci_bind_by_name($stmt, ':course_category', $course_category);
@@ -230,18 +232,21 @@ require_once './../../Controller/db_connect.php';
                     oci_bind_by_name($stmt, ':description', $description);
                     oci_bind_by_name($stmt, ':course_modules', $course_modules);
                     oci_bind_by_name($stmt, ':course_fee', $course_fee);
-                    // oci_execute($stmt);
-            
-                    if (oci_execute($stmt)) {
-                        // Course added successfully
+
+                    // Execute the statement
+                    oci_execute($stmt);
+
+                    // Check if the insert was successful
+                    if (oci_num_rows($stmt) > 0) {
                         $success_message = 'Course added successfully.';
                     } else {
-                        // Failed to add course
                         $error_message = 'Failed to add course.';
                     }
-                    // Close the database connection
+
+                    // Close the statement and the database connection
                     oci_free_statement($stmt);
                     oci_close($conn);
+
 
                     // Redirect to the courses page
                     // header("Location: index.php");
