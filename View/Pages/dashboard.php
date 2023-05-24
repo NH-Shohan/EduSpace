@@ -192,6 +192,34 @@ require_once './../../Controller/db_connect.php';
                             ?>
                         </table>
                     </div>
+                    <br><br><br>
+
+                    <!-- 3rd table course log -->
+                    <div>
+                        <table class="customers">
+                            <tr>
+                                <th>Log ID</th>
+                                <th>Event Type</th>
+                                <th>Event Description</th>
+                                <th>Created At</th>
+                            </tr>
+                            <?php
+                            $sql = "SELECT * FROM course_log";
+                            $stmt = oci_parse($conn, $sql);
+                            oci_execute($stmt);
+
+                            while ($row = oci_fetch_assoc($stmt)) {
+                                echo '<tr>
+      <td>' . $row["LOG_ID"] . '</td>
+      <td>' . $row["EVENT_TYPE"] . '</td>
+      <td>' . $row["EVENT_DESCRIPTION"] . '</td>
+      <td>' . $row["CREATED_AT"] . '</td>
+    </tr>';
+                            }
+                            ?>
+                        </table>
+
+                    </div>
                 </div>
             <?php } ?>
 
