@@ -19,12 +19,23 @@ if (isset($_SESSION['email'])) {
 
         header("Location: showCourse.php?course_id=$courseId");
     } else {
-        // User is not enrolled in the course, proceed with enrollment
-        $enrollSql = "INSERT INTO enrolled_courses (id, user_email, course_id, enroll_date) VALUES (enrolled_courses_seq.NEXTVAL, '$userEmail', '$courseId', SYSDATE)";
-        $enrollResult = oci_parse($conn, $enrollSql);
-        oci_execute($enrollResult);
+        // Prepare the procedure call
+        $enrollProcedure = "BEGIN enroll_user_in_course(:user_email, :course_id); END;";
+        $enrollStmt = oci_parse($conn, $enrollProcedure);
 
-        if ($enrollResult) {
+        // Bind the parameters
+        oci_bind_by_name($enrollStmt, ':user_email', $userEmail);
+        oci_bind_by_name($enrollStmt, ':course_id', $courseId);
+
+        // Execute the procedure
+        oci_execute($enrollStmt);
+
+        // Close the statement and connection
+        oci_free_statement($enrollStmt);
+        oci_close($conn);
+
+
+        if ($enrollStmt) {
             // Enrollment successful
             $_SESSION['enrollErr'] = "Enrollment successful.";
             header("Location: showCourse.php?course_id=$courseId");

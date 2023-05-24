@@ -163,11 +163,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate and sanitize the input if needed
     // ...
 
-    // Perform the database update query
-    $query = "UPDATE courses SET course_name = :course_name, course_image = :course_image, course_category = :course_category, instructor_name = :instructor_name, instructor_email = :instructor_email, rating = :rating, description = :description, course_modules = :course_modules, course_fee = :course_fee WHERE course_id = :course_id";
-    $stmt = oci_parse($conn, $query);
-
-    // Bind the parameters
+    // Prepare the function call
+    $sql = "BEGIN :result := execute_update_course(:course_id, :course_name, :course_image, :course_category, :instructor_name, :instructor_email, :rating, :description, :course_modules, :course_fee); END;";
+    $stmt = oci_parse($conn, $sql);
+    oci_bind_by_name($stmt, ":result", $result, 100, SQLT_CHR);
+    oci_bind_by_name($stmt, ":course_id", $course_id);
     oci_bind_by_name($stmt, ":course_name", $course_name);
     oci_bind_by_name($stmt, ":course_image", $course_image);
     oci_bind_by_name($stmt, ":course_category", $course_category);
@@ -177,11 +177,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     oci_bind_by_name($stmt, ":description", $description);
     oci_bind_by_name($stmt, ":course_modules", $course_modules);
     oci_bind_by_name($stmt, ":course_fee", $course_fee);
-    oci_bind_by_name($stmt, ":course_id", $course_id);
 
-    $result = oci_execute($stmt);
+    // Execute the function call
+    $result2 = oci_execute($stmt);
 
-    if ($result) {
+    if ($result2) {
 
         $error_message = "Course updated successfully.";
         // $_SESSION['success_message'] = "Course updated successfully.";

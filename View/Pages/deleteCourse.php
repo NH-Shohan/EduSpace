@@ -171,9 +171,11 @@ require_once './../../Controller/db_connect.php';
                     // Delete the selected course from the database
                     $course_id = $_POST['course_id'];
 
-                    $query = "DELETE FROM courses WHERE course_id = :course_id";
-                    $stmt = oci_parse($conn, $query);
-                    oci_bind_by_name($stmt, ':course_id', $course_id);
+                    // Prepare the function call
+                    $sql = "BEGIN :result := execute_delete_course(:course_id); END;";
+                    $stmt = oci_parse($conn, $sql);
+                    oci_bind_by_name($stmt, ":result", $result, 100, SQLT_CHR);
+                    oci_bind_by_name($stmt, ":course_id", $course_id);
 
                     if (oci_execute($stmt)) {
                         // Redirect to the same page to reload course names
