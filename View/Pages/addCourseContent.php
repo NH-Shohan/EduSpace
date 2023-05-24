@@ -214,19 +214,11 @@ require_once './../../Controller/db_connect.php';
 
                             // echo $_POST['course_id'];
                             // Insert data into course_content table
-                            $query = "INSERT INTO course_content (course_id, totalModule, moduleNumber, moduleName, lectureVideoLinks, totalLecture, lectureName, lectureDescription, lectureNumber) VALUES (:course_id, :total_modules, :module_number, :module_name, :lecture_video_links, :total_lectures, :lecture_name, :lecture_description, :lecture_number)";
+                            // Prepare the statement to call the stored procedure
+                            $query = "BEGIN INSERT_COURSE_CONTENT(:course_id, :total_modules, :module_number, :module_name, :lecture_video_links, :total_lectures, :lecture_name, :lecture_description, :lecture_number); END;";
                             $stmt = oci_parse($conn, $query);
-                            oci_bind_by_name($stmt, ':course_id', $course_id);
-                            oci_bind_by_name($stmt, ':total_modules', $total_modules);
-                            oci_bind_by_name($stmt, ':module_number', $module_number);
-                            oci_bind_by_name($stmt, ':module_name', $module_name);
-                            oci_bind_by_name($stmt, ':lecture_video_links', $lecture_video_links);
-                            oci_bind_by_name($stmt, ':total_lectures', $total_lectures);
-                            oci_bind_by_name($stmt, ':lecture_name', $lecture_name);
-                            oci_bind_by_name($stmt, ':lecture_description', $lecture_description);
-                            oci_bind_by_name($stmt, ':lecture_number', $lecture_number);
 
-                            // Add the lengths of the variables for correct binding
+                            // Bind the input parameters
                             oci_bind_by_name($stmt, ':course_id', $course_id, 255);
                             oci_bind_by_name($stmt, ':total_modules', $total_modules, 255);
                             oci_bind_by_name($stmt, ':module_number', $module_number, 255);
@@ -237,9 +229,8 @@ require_once './../../Controller/db_connect.php';
                             oci_bind_by_name($stmt, ':lecture_description', $lecture_description, 255);
                             oci_bind_by_name($stmt, ':lecture_number', $lecture_number, 255);
 
-
-                            // Set parameters and execute statement
-                            $course_id = $_POST['course_id']; // Use the selected course name as the course_id
+                            // Set parameters and execute the statement
+                            $course_id = $_POST['course_id'];
                             $total_modules = $_POST['total_modules'];
                             $module_number = $_POST['module_number'];
                             $module_name = $_POST['module_name'];
@@ -249,18 +240,24 @@ require_once './../../Controller/db_connect.php';
                             $lecture_description = $_POST['lecture_description'];
                             $lecture_number = $_POST['lecture_number'];
 
-                            if (oci_execute($stmt)) {
+                            oci_execute($stmt);
+
+                            // Check if the insert was successful
+                            if (oci_num_rows($stmt) > 0) {
                                 echo "New course content added successfully.";
                             } else {
                                 echo "Error: Failed to add course content.";
                             }
 
+                            // Close the statement and the database connection
                             oci_free_statement($stmt);
+                            oci_close($conn);
+
                         }
                     }
 
                     // Close the database connection
-                    oci_close($conn);
+                    // oci_close($conn);
                     ?>
                 </div>
             </div>
