@@ -252,7 +252,7 @@ require_once './../../Controller/db_connect.php';
                 <td>' . $row["COURSE_NAME"] . '</td>
                 <td>' . $row["INSTRUCTOR_NAME"] . '</td>
                 <td>' . $row["ENROLL_DATE"] . '</td>
-                <td><button><a href="showCourseDetails.php?course_id=' . $row["COURSE_ID"] . '">Show</a></button></td>
+                <td><button><a href="showCourse.php?course_id=' . $row["COURSE_ID"] . '">Show</a></button></td>
             </tr>';
                     }
                 }

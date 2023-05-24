@@ -473,6 +473,63 @@ require_once './../../Controller/db_connect.php';
             </div>
         </div>
 
+        <section class="recommended-courses">
+            <h2>Recommended Courses</h2>
+            <div class="slider-container">
+                <div class="slider-track">
+                    <?php
+                    // select all records from the recommended_courses table and join with courses table
+                    $sql = "SELECT * FROM recommended_courses JOIN courses ON recommended_courses.course_id = courses.course_id";
+                    $stmt = oci_parse($conn, $sql);
+                    oci_execute($stmt);
+
+                    $row = oci_fetch_assoc($stmt);
+                    if ($row !== false) {
+                        // output data of each row
+                        do {
+                            ?>
+                            <div class="course-card recommended">
+                                <div class="course-details">
+                                    <h3>
+                                        <?php echo $row['COURSE_NAME']; ?>
+                                    </h3>
+                                    <div class="courseImg">
+                                        <img src="<?php echo $row['COURSE_IMAGE']; ?>" alt="<?php echo $row['COURSE_NAME']; ?>">
+                                    </div>
+                                    <p>
+                                        Instructor:
+                                        <?php echo $row['INSTRUCTOR_NAME']; ?>
+                                    </p>
+                                    <p>
+                                        Rating:
+                                        <?php echo $row['RATING']; ?>⭐
+                                    </p>
+                                    <p>
+                                        Fee: BDT
+                                        <?php echo $row['COURSE_FEE']; ?>
+                                    </p>
+                                    <a href="showCourseDetails.php?course_id=<?php echo $row['COURSE_ID']; ?>">Let's Explore</a>
+                                </div>
+                            </div>
+                            <?php
+                        } while ($row = oci_fetch_assoc($stmt));
+                    } else {
+                        echo "No records found";
+                    }
+                    ?>
+                </div>
+                <div class="slider-buttons">
+                    <div class="slider-button slider-button-left" onclick="moveSlider(-1)">
+                        <i class="fa fa-chevron-left"></i>
+                    </div>
+                    <div class="slider-button slider-button-right" onclick="moveSlider(1)">
+                        <i class="fa fa-chevron-right"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
         <!-- Recommended -->
 
         <!-- Search bar -->

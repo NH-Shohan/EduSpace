@@ -115,6 +115,9 @@ require_once './../../Controller/db_connect.php';
 
         <div class="dashboard_content_section">
             <?php
+
+            $success_message = '';
+            $error_message = '';
             // Connect to the database
             
             // Check if the form has been submitted
@@ -123,25 +126,27 @@ require_once './../../Controller/db_connect.php';
                     $course_id = $_POST['course_id'];
 
                     // Insert the course_id into the recommended_courses table
-                    $query = "INSERT INTO recommended_courses (course_id) VALUES (?)";
-                    $stmt = mysqli_prepare($conn, $query);
-                    mysqli_stmt_bind_param($stmt, 'i', $course_id);
-                    mysqli_stmt_execute($stmt);
+                    $query = "INSERT INTO recommended_courses (recommended_course_id, course_id) VALUES (recommended_course_seq.NEXTVAL, :course_id)";
+                    $stmt = oci_parse($conn, $query);
+                    oci_bind_by_name($stmt, ':course_id', $course_id);
+                    oci_execute($stmt);
 
                     // Check if the insert was successful
-                    if (mysqli_stmt_affected_rows($stmt) > 0) {
-                        echo "Course added as a recommended course.";
+                    $rowsAffected = oci_num_rows($stmt);
+                    if ($rowsAffected > 0) {
+                        $success_message = "Course added as a recommended course.";
                     } else {
-                        echo 'Failed to add course as a recommended course';
+                        $error_message = 'Failed to add course as a recommended course';
                     }
-                } catch (mysqli_sql_exception $e) {
-                    if ($e->getCode() == 1062) { // check for duplicate key error code
-                        echo "Course already exists as recommended course";
+                } catch (PDOException $e) {
+                    if ($e->getCode() == 1) { // check for unique constraint violation error code
+                        $error_message = "Course already exists as recommended course";
                     } else {
-                        echo "An error occurred: " . $e->getMessage();
+                        $error_message = "An error occurred: " . $e->getMessage();
                     }
                 }
             }
+
 
             ?>
 
@@ -156,20 +161,34 @@ require_once './../../Controller/db_connect.php';
                     
                     // Query the courses table
                     $query = "SELECT course_id, course_name FROM courses";
-                    $result = mysqli_query($conn, $query);
+                    $stmt = oci_parse($conn, $query);
+                    oci_execute($stmt);
 
                     // Loop through the results and create an option for each course
-                    while ($row = mysqli_fetch_assoc($result)) {
+                    while ($row = oci_fetch_assoc($stmt)) {
                         ?>
-                        <option value="<?php echo $row['course_id'] ?>"><?php echo $row['course_name'] ?></option>
+                        <option value="<?php echo $row['COURSE_ID'] ?>"><?php echo $row['COURSE_NAME'] ?></option>
                         <?php
                     }
 
                     // Close the database connection
-                    mysqli_close($conn);
+                    oci_close($conn);
                     ?>
                 </select>
+
                 <br />
+                <?php if (!empty($success_message)): ?>
+                    <div class="success_message success">
+                        <?php echo $success_message; ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if (!empty($error_message)): ?>
+                    <div class="error_message error">
+                        <?php echo $error_message; ?>
+                    </div>
+                <?php endif; ?>
+                <br>
                 <button class="recommended_course_button" type="submit">Add Recommended Course</button>
             </form>
         </div>
